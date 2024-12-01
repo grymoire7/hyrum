@@ -1,0 +1,19 @@
+# frozen_string_literal: true
+
+module Messages
+  MESSAGES = {
+<% messages.each do |key, values| -%>
+    <%= key %>: [
+      <%= values.map { |message| "\"#{message}\"" }.join(",\n      ") %>
+    ]<%= "," unless key == messages.keys.last %>
+<% end -%>
+  }.freeze
+
+  def self.message(key)
+    MESSAGES[key].sample
+  end
+end
+
+if $PROGRAM_NAME == __FILE__
+  puts Messages.message(ARGV[0].to_sym)
+end

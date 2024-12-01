@@ -1,0 +1,38 @@
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.1
+
+Documentation:
+  Enabled: false
+
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+
+Lint/MissingSuper:
+  Enabled: false
+
+Lint/NonDeterministicRequireOrder:
+  Enabled: false
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Layout/FirstArrayElementIndentation:
+  Enabled: false
+
+Layout/FirstHashElementIndentation:
+  Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+Layout/ArgumentAlignment:
+  Enabled: false
+
+Layout/LineLength:
+  Exclude:
+    - spec/**/*.rb
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb

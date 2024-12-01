@@ -1,0 +1,19 @@
+const Messages = {
+  MESSAGES: {
+<% messages.each do |key, values| -%>
+    <%= key %>: [
+      <%= values.map { |message| "\"#{message}\"" }.join(",\n      ") %>
+    ]<%= "," unless key == messages.keys.last %>
+<% end -%>
+  },
+
+  message(key) {
+    const messages = this.MESSAGES[key];
+    return messages[Math.floor(Math.random() * messages.length)];
+  }
+};
+
+if (require.main === module) {
+  const key = process.argv[2];
+  console.log(Messages.message(key));
+}

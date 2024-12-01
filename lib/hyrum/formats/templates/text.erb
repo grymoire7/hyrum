@@ -1,0 +1,6 @@
+<% messages.each do |key, values| -%>
+Messages for <%= key %>:
+  <% values.each do |msg| -%>
+  - <%= msg %>
+  <% end %>
+<% end %>

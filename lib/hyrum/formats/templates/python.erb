@@ -1,0 +1,18 @@
+import random
+import sys
+
+class Messages:
+    MESSAGES = {
+<% messages.each do |key, values| -%>
+        '<%= key %>': [
+            <%= values.map { |message| "\"#{message}\"" }.join(",\n            ") %>
+        ]<%= "," unless key == messages.keys.last %>
+<% end -%>
+    }
+
+    @staticmethod
+    def message(key):
+        return random.choice(Messages.MESSAGES[key])
+
+if __name__ == "__main__":
+    print(Messages.message(sys.argv[1]))

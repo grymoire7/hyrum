@@ -1,0 +1,30 @@
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+public class Messages {
+    private static final HashMap<String, List<String>> MESSAGES = new HashMap<>();
+
+    static {
+<% messages.each do |key, values| -%>
+        MESSAGES.put("<%= key %>", List.of(
+            <%= values.map { |message| "\"#{message}\"" }.join(",\n            ") %>
+        ));
+<% end -%>
+    }
+
+    public static String message(String key) {
+        List<String> messages = MESSAGES.get(key);
+        if (messages != null && !messages.isEmpty()) {
+            Random random = new Random();
+            return messages.get(random.nextInt(messages.size()));
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        if (args.length > 0) {
+            System.out.println(message(args[0]));
+        }
+    }
+}
