@@ -5,7 +5,7 @@
 Hyrum's message generator (hyrum) generates a method in the chosen language that
 returns one of several variations of a provided message at random.
 
-![Tests](https://github.com/grymoire7/hyrum/actions/workflows/main.yml/badge.svg?branch=main)
+![Tests](https://github.com/grymoire7/hyrum/actions/workflows/ruby.yml/badge.svg?branch=main)
 ![Ruby Version](https://img.shields.io/badge/Ruby-3.3.5-green?logo=Ruby&logoColor=red&label=Ruby%20version&color=green)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/grymoire7/hyrum/blob/main/LICENSE.txt)
 
