@@ -53,14 +53,18 @@ module Hyrum
 
       def configure
         OpenAI.configure do |config|
-          config.access_token = ENV.fetch('OPENAI_ACCESS_TOKEN')
-          config.log_errors = true # Use for development
+          config.access_token = ENV.fetch('OPENAI_ACCESS_TOKEN') if options[:ai_service] == :openai
+          # config.log_errors = true # Use for development
           config.organization_id = ENV['OPENAI_ORGANIZATION_ID'] if ENV['OPENAI_ORGANIZATION_ID']
           config.request_timeout = 240
           if options[:ai_service] == :ollama
             config.uri_base = ENV['OLLAMA_URL'] || 'http://localhost:11434'
           end
         end
+      rescue KeyError => e
+        puts "Error: #{e.message}"
+        puts "Please set the OPENAI_ACCESS_TOKEN environment variable."
+        exit
       end
 
       def canned_content
