@@ -49,6 +49,13 @@ module Hyrum
             temperature: 0.7
           }
         )
+      rescue OpenAI::Error => e
+        puts "OpenAI::Error: #{e.message}"
+        exit
+      rescue Faraday::Error => e
+        puts "Faraday::Error: #{e.message}"
+        puts "Please check that the #{options[:ai_model]} model is valid."
+        exit
       end
 
       def configure
