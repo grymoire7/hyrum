@@ -71,9 +71,6 @@ Usage: hyrum [options]
 ```
 
 ## Installation
-NOTE: This gem is not yet available on rubygems.org. You can install it from the
-repository with `bundle exec rake install`.  In the future, you can...
-
 Install the gem and add to the application's Gemfile by executing:
 
     $ bundle add hyrum
