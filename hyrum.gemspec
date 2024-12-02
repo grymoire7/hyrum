@@ -13,12 +13,12 @@ Gem::Specification.new do |gem|
   gem.description   = "A multi-language code generator to cope with Hyrum's law"
   gem.homepage      = 'https://github.com/grymoire7/hyrum'
   gem.licenses      = ['MIT']
-  gem.required_ruby_version = '>= 3.1.0'
+  gem.required_ruby_version = '>= 3.2.0'
 
   gem.metadata['rubygems_mfa_required'] = 'true'
-  gem.metadata['homepage_uri'] = gem.homepage
-  gem.metadata['source_code_uri'] = gem.homepage
-  gem.metadata['changelog_uri'] = "#{gem.homepage}/blob/master/CHANGELOG.md"
+  # gem.metadata['homepage_uri'] = gem.homepage
+  # gem.metadata['source_code_uri'] = gem.homepage
+  gem.metadata['changelog_uri'] = "#{gem.homepage}/blob/main/CHANGELOG.md"
 
   gem.extra_rdoc_files = Dir['README.md', 'CHANGELOG.md', 'LICENSE.txt']
   gem.rdoc_options += [
@@ -39,12 +39,10 @@ Gem::Specification.new do |gem|
   # end
   gem.files = Dir.glob('lib/**/*') + Dir.glob('bin/**/*')
 
-  gem.bindir = 'exe'
-  gem.executables = gem.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
-  # gem.executables   = ['hyrum']
+  gem.executables << 'hyrum'
   gem.require_paths = ['lib']
 
   # gem.add_dependency 'gen-ai', '~> 0.4'
   gem.add_dependency 'ruby-openai', '~> 7.3'
-  gem.add_dependency 'zeitwerk', '~> 2.6'
+  gem.add_dependency 'zeitwerk', '~> 2.7'
 end

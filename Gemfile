@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 # Generative AI toolset for Ruby
 # gem "gen-ai" # , "~> 0.4.3"
 gem 'ruby-openai', '~> 7.3'
-gem 'zeitwerk', '~> 2.6'
+gem 'zeitwerk', '~> 2.7'
 
 group :development, :test do
   # Static analysis for code quality [https://rubocop.org/]
