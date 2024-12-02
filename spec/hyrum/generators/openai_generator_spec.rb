@@ -6,7 +6,7 @@ RSpec.describe Hyrum::Generators::OpenaiGenerator do
       message: 'This is a test message',
       key: 'key',
       ai_service: :openai,
-      ai_model: 'gpt-4o-mini',
+      ai_model: :'gpt-4o-mini',
       verbose: false
     }
   end
@@ -41,7 +41,7 @@ RSpec.describe Hyrum::Generators::OpenaiGenerator do
     end
 
     context 'when the ai_model is fake' do
-      let(:options) { super().merge(ai_model: 'fake') }
+      let(:options) { super().merge(ai_model: :fake) }
 
       it 'returns fake content' do
         expected = JSON.parse(fake_content)

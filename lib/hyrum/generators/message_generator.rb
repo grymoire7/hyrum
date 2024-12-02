@@ -5,9 +5,9 @@ module Hyrum
     AI_SERVICES = %i[openai ollama fake].freeze
 
     AI_MODEL_DEFAULTS = {
-      openai: 'gpt-4o-mini',
-      ollama: 'llama3',
-      fake: 'fake'
+      openai: :'gpt-4o-mini',
+      ollama: :llama3,
+      fake: :fake
     }.freeze
 
     GENERATOR_CLASSES = {

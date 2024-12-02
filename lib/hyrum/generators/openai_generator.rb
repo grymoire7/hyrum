@@ -16,12 +16,12 @@ module Hyrum
       end
 
       def generate
-        if @options[:ai_model] == 'fake'
+        if options[:ai_model] == :fake
           return JSON.parse(canned_content)
         end
 
         response = get_response(prompt)
-        puts "Response: #{JSON.pretty_generate(response)}" if @options[:verbose]
+        puts "Response: #{JSON.pretty_generate(response)}" if options[:verbose]
         content = response.dig('choices', 0, 'message', 'content')
         JSON.parse(content)
       end
@@ -35,7 +35,7 @@ module Hyrum
           should be returned as json in the format: `{ "<%= key %>": ['list', 'of', 'messages']}`
           The key should be `"<%= key %>"` followed by the list of messages.
         PROMPT
-        erb_hash = { key: @options[:key], message: @options[:message] }
+        erb_hash = { key: options[:key], message: options[:message] }
         template = ERB.new(prompt, trim_mode: '-')
         template.result_with_hash(erb_hash)
       end
@@ -43,7 +43,7 @@ module Hyrum
       def get_response(prompt)
         @client.chat(
           parameters: {
-            model: @options[:ai_model],
+            model: options[:ai_model],
             response_format: { type: 'json_object' },
             messages: [{ role: 'user', content: prompt}],
             temperature: 0.7

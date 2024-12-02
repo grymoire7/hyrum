@@ -68,14 +68,14 @@ module Hyrum
     def ai_service_options(parser)
       description = "AI service: one of #{Generators::AI_SERVICES.join(', ')}"
       parser.on('-s SERVICE', '--service SERVICE', Generators::AI_SERVICES, description) do |service|
-        options[:ai_service] = service
+        options[:ai_service] = service.to_sym
       end
       options[:ai_service] ||= :fake
 
       default_model = Generators::AI_MODEL_DEFAULTS[options[:ai_service]]
       description = 'AI model: must be a valid model for the selected service'
       parser.on('-d MODEL', '--model MODEL', description) do |model|
-        options[:ai_model] = model
+        options[:ai_model] = model.to_sym
       end
       options[:ai_model] ||= default_model
     end
