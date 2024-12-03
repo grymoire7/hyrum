@@ -4,7 +4,7 @@ RSpec.describe Hyrum::Generators::OpenaiGenerator do
   let(:options) do
     {
       message: 'This is a test message',
-      key: 'key',
+      key: :key,
       ai_service: :openai,
       ai_model: :'gpt-4o-mini',
       verbose: false

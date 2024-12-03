@@ -69,10 +69,6 @@ module Hyrum
         puts "Please set the OPENAI_ACCESS_TOKEN environment variable."
         exit
       end
-
-      def canned_content
-        FakeGenerator::FAKE_MESSAGES
-      end
     end
   end
 end
