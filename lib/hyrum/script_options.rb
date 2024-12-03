@@ -19,6 +19,7 @@ module Hyrum
         parser.parse!(@args)
       end
       enforce_mandatory_options
+      set_dynamic_defaults
       options
     rescue OptionParser::InvalidOption => e
       err = "Invalid option: #{e.message}"
@@ -34,6 +35,11 @@ module Hyrum
     end
 
     private
+
+    def set_dynamic_defaults
+      default_model = Generators::AI_MODEL_DEFAULTS[options[:ai_service]]
+      options[:ai_model] ||= default_model
+    end
 
     def enforce_mandatory_options
       missing = MANDATORY_OPTIONS.select { |param| options[param].nil? }
@@ -66,25 +72,25 @@ module Hyrum
     end
 
     def ai_service_options(parser)
+      options[:ai_service] = :fake
+
       description = "AI service: one of #{Generators::AI_SERVICES.join(', ')}"
       parser.on('-s SERVICE', '--service SERVICE', Generators::AI_SERVICES, description) do |service|
         options[:ai_service] = service.to_sym
       end
-      options[:ai_service] ||= :fake
 
-      default_model = Generators::AI_MODEL_DEFAULTS[options[:ai_service]]
       description = 'AI model: must be a valid model for the selected service'
       parser.on('-d MODEL', '--model MODEL', description) do |model|
         options[:ai_model] = model.to_sym
       end
-      options[:ai_model] ||= default_model
     end
 
     def message_key_options(parser)
+      options[:key] = :status
+
       parser.on('-k KEY', '--key KEY', 'Message key') do |key|
-        options[:key] = key
+        options[:key] = key.to_sym
       end
-      options[:key] ||= 'status'
     end
 
     def message_options(parser)
@@ -100,13 +106,14 @@ module Hyrum
     end
 
     def format_options(parser)
+      options[:format] = :text
+
       formats = Formats::FORMATS
       description = 'Output format. Supported formats are:'
       supported   = formats.join(', ')
       parser.on('-f FORMAT', '--format FORMAT', formats, description, supported) do |format|
         options[:format] = format
       end
-      options[:format] ||= :text
     end
   end
 end

@@ -40,15 +40,6 @@ RSpec.describe Hyrum::Generators::OpenaiGenerator do
       allow(subject).to receive(:get_response).and_return(fake_response)
     end
 
-    context 'when the ai_model is fake' do
-      let(:options) { super().merge(ai_model: :fake) }
-
-      it 'returns fake content' do
-        expected = JSON.parse(fake_content)
-        expect(subject.generate).to eq(expected)
-      end
-    end
-
     context 'when the ai_model is not fake' do
       it 'calls get_response' do
         expect(subject).to receive(:get_response)

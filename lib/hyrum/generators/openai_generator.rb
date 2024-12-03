@@ -16,12 +16,8 @@ module Hyrum
       end
 
       def generate
-        if options[:ai_model] == :fake
-          return JSON.parse(canned_content)
-        end
-
         response = get_response(prompt)
-        puts "Response: #{JSON.pretty_generate(response)}" if options[:verbose]
+        puts "OpenAI response: #{JSON.pretty_generate(response)}" if options[:verbose]
         content = response.dig('choices', 0, 'message', 'content')
         JSON.parse(content)
       end
