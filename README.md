@@ -21,7 +21,8 @@ Also, we don't want to spend a lot of time writing variations of the same messag
 This is the use case Hyrum tries to solve. It uses an AI service (openai,
 ollama, etc.) to generate variations of a provided message. The generated
 variations are also formatted in the language/format of your choice (ruby,
-json, etc.).
+json, etc.). This code can then be used in your project to ensure messages are
+no longer static, improving your api design.
 
 ## Example
 
