@@ -11,11 +11,12 @@ module Hyrum
 
       def initialize(options)
         @options = options
-        configure
-        @client = OpenAI::Client.new
       end
 
       def generate
+        configure
+        @client = OpenAI::Client.new
+
         response = get_response(prompt)
         puts "OpenAI response: #{JSON.pretty_generate(response)}" if options[:verbose]
         content = response.dig('choices', 0, 'message', 'content')
@@ -57,6 +58,7 @@ module Hyrum
       def configure
         OpenAI.configure do |config|
           config.access_token = ENV.fetch('OPENAI_ACCESS_TOKEN') if options[:ai_service] == :openai
+          puts "OpenAI access token: #{config.access_token}"
           # config.log_errors = true # Use for development
           config.organization_id = ENV['OPENAI_ORGANIZATION_ID'] if ENV['OPENAI_ORGANIZATION_ID']
           config.request_timeout = 240
