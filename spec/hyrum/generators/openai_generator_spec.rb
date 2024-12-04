@@ -37,17 +37,18 @@ RSpec.describe Hyrum::Generators::OpenaiGenerator do
 
   describe '#generate' do
     before do
-      allow(subject).to receive(:get_response).and_return(canned_response)
+      allow(subject).to receive(:chat_response).and_return(canned_response)
     end
 
     context 'when the ai_service is openai' do
       context 'when an access token is provided' do
-        before do
+        before(:each) do
           ENV['OPENAI_ACCESS_TOKEN'] = 'fake_token'
         end
 
-        it 'calls get_response' do
-          expect(subject).to receive(:get_response)
+        it 'calls chat_response' do
+          # allow(OpenAI::Client).to receive(:chat).and_return(canned_response)
+          expect(subject).to receive(:chat_response)
           subject.generate
         end
       end
@@ -57,8 +58,8 @@ RSpec.describe Hyrum::Generators::OpenaiGenerator do
           ENV.delete('OPENAI_ACCESS_TOKEN')
         end
 
-        it 'does not call get_response' do
-          expect(subject).not_to receive(:get_response)
+        it 'does not call chat_response' do
+          expect(subject).not_to receive(:chat_response)
           expect { subject.generate }
         end
 
@@ -71,8 +72,8 @@ RSpec.describe Hyrum::Generators::OpenaiGenerator do
     context 'when the ai_service is ollama' do
       let(:options) { super().merge(ai_service: :ollama) }
 
-      it 'calls get_response' do
-        expect(subject).to receive(:get_response)
+      it 'calls chat_response' do
+        expect(subject).to receive(:chat_response)
         subject.generate
       end
     end
