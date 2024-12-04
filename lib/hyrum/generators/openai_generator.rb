@@ -15,9 +15,8 @@ module Hyrum
 
       def generate
         configure
-        @client = OpenAI::Client.new
 
-        response = get_response(prompt)
+        response = chat_response
         puts "OpenAI response: #{JSON.pretty_generate(response)}" if options[:verbose]
         content = response.dig('choices', 0, 'message', 'content')
         JSON.parse(content)
@@ -37,15 +36,9 @@ module Hyrum
         template.result_with_hash(erb_hash)
       end
 
-      def get_response(prompt)
-        @client.chat(
-          parameters: {
-            model: options[:ai_model],
-            response_format: { type: 'json_object' },
-            messages: [{ role: 'user', content: prompt}],
-            temperature: 0.7
-          }
-        )
+      def chat_response
+        client = OpenAI::Client.new
+        client.chat(parameters: chat_params)
       rescue OpenAI::Error => e
         puts "OpenAI::Error: #{e.message}"
         exit
@@ -55,10 +48,18 @@ module Hyrum
         exit
       end
 
+      def chat_params
+        {
+          model: options[:ai_model],
+          response_format: { type: 'json_object' },
+          messages: [{ role: 'user', content: prompt}],
+          temperature: 0.7
+        }
+      end
+
       def configure
         OpenAI.configure do |config|
           config.access_token = ENV.fetch('OPENAI_ACCESS_TOKEN') if options[:ai_service] == :openai
-          puts "OpenAI access token: #{config.access_token}"
           # config.log_errors = true # Use for development
           config.organization_id = ENV['OPENAI_ORGANIZATION_ID'] if ENV['OPENAI_ORGANIZATION_ID']
           config.request_timeout = 240
