@@ -11,3 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - This CHANGELOG file
 - Initial version of the project
+
+## [0.0.2] - 2024-12-06
+
+### Fixed
+
+- Minor bug fixes
+- Option defaults
+
+### Added
+
+- New OpenAI generator specs
