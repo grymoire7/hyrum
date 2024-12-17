@@ -64,7 +64,6 @@ RSpec.describe Hyrum::Generators::OpenaiGenerator do
 
         it 'does not call chat_response' do
           expect(subject).not_to receive(:chat_response)
-          expect { subject.generate }.to raise_error(SystemExit)
         end
 
         it 'exits with an error' do

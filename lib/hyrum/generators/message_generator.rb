@@ -18,9 +18,11 @@ module Hyrum
 
     class MessageGenerator
       def self.create(options)
-        generator_class = GENERATOR_CLASSES[options[:ai_service].to_sym]
+        unless GENERATOR_CLASSES.key?(options[:ai_service].to_sym)
+          raise ArgumentError, "Invalid AI service: #{options[:ai_service]}"
+        end
 
-        # Add error handling for invalid format
+        generator_class = GENERATOR_CLASSES[options[:ai_service].to_sym]
         generator_class.new(options)
       end
     end
