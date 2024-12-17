@@ -40,7 +40,7 @@ module Hyrum
 
       def initialize(options)
         @options = options
-        @ai_service = options[:ai_service]
+        # @ai_service = options[:ai_service]
       end
 
       def generate
