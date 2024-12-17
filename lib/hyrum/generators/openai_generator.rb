@@ -26,12 +26,12 @@ module Hyrum
 
       def prompt
         prompt = <<~PROMPT
-          Please provide 5 alternative status messages for the following message:
+          Please provide <%= number %> alternative status messages for the following message:
           `<%= message %>`. The messages should be unique and informative. The messages
           should be returned as json in the format: `{ "<%= key %>": ['list', 'of', 'messages']}`
           The key should be `"<%= key %>"` followed by the list of messages.
         PROMPT
-        erb_hash = { key: options[:key], message: options[:message] }
+        erb_hash = { key: options[:key], message: options[:message], number: options[:number] }
         template = ERB.new(prompt, trim_mode: '-')
         template.result_with_hash(erb_hash)
       end

@@ -85,14 +85,20 @@ module Hyrum
     def message_key_options(parser)
       options[:key] = :status
 
-      parser.on('-k KEY', '--key KEY', 'Message key') do |key|
+      parser.on('-k KEY', '--key KEY', 'Message key (default: status)') do |key|
         options[:key] = key.to_sym
       end
     end
 
     def message_options(parser)
-      parser.on('-m MESSAGE', '--message MESSAGE', 'Status message') do |message|
+      parser.on('-m MESSAGE', '--message MESSAGE', 'Status message (required)') do |message|
         options[:message] = message
+      end
+    
+      options[:number] = 5
+
+      parser.on('-n NUMBER', '--number NUMBER', Integer, 'Number of messages to generate (default: 5)',) do |number|
+        options[:number] = number.to_i
       end
     end
 

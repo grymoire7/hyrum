@@ -8,7 +8,7 @@ loader.setup
 module Hyrum
   def self.run(args)
     options = ScriptOptions.new(args).parse
-    generator_opts = options.slice(:message, :key, :ai_service, :ai_model, :verbose)
+    generator_opts = options.slice(:message, :key, :ai_service, :ai_model, :number, :verbose)
     formatter_opts = options.slice(:format, :verbose)
 
     puts "Options: #{options.inspect}" if options[:verbose]
