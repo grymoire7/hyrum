@@ -47,9 +47,13 @@ RSpec.describe Hyrum::Generators::OpenaiGenerator do
         end
 
         it 'calls chat_response' do
-          # allow(OpenAI::Client).to receive(:chat).and_return(canned_response)
           expect(subject).to receive(:chat_response)
           subject.generate
+        end
+
+        it 'returns parsed JSON content' do
+          result = subject.generate
+          expect(result).to eq('key' => ['message 1', 'message2', 'message3'])
         end
       end
 
@@ -60,7 +64,7 @@ RSpec.describe Hyrum::Generators::OpenaiGenerator do
 
         it 'does not call chat_response' do
           expect(subject).not_to receive(:chat_response)
-          expect { subject.generate }
+          expect { subject.generate }.to raise_error(SystemExit)
         end
 
         it 'exits with an error' do
@@ -75,6 +79,11 @@ RSpec.describe Hyrum::Generators::OpenaiGenerator do
       it 'calls chat_response' do
         expect(subject).to receive(:chat_response)
         subject.generate
+      end
+
+      it 'returns parsed JSON content' do
+        result = subject.generate
+        expect(result).to eq('key' => ['message 1', 'message2', 'message3'])
       end
     end
   end
