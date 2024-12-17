@@ -45,7 +45,7 @@ RSpec.describe Hyrum::ScriptOptions do
             end
         end
 
-        context 'with invalid argument' do
+        context 'with invalid service argument' do
             it 'outputs an error message and raises SystemExit' do
                 args = ['-s', 'invalid_service']
                 script_options = Hyrum::ScriptOptions.new(args)

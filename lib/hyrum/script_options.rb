@@ -71,7 +71,7 @@ module Hyrum
     def ai_service_options(parser)
       options[:ai_service] = :fake
 
-      description = "AI service: one of #{Generators::AI_SERVICES.join(', ')}"
+      description = "AI service: one of #{Generators::AI_SERVICES.join(', ')} (default: fake)"
       parser.on('-s SERVICE', '--service SERVICE', Generators::AI_SERVICES, description) do |service|
         options[:ai_service] = service.to_sym
       end
@@ -94,7 +94,7 @@ module Hyrum
       parser.on('-m MESSAGE', '--message MESSAGE', 'Status message (required)') do |message|
         options[:message] = message
       end
-    
+
       options[:number] = 5
 
       parser.on('-n NUMBER', '--number NUMBER', Integer, 'Number of messages to generate (default: 5)',) do |number|
@@ -114,7 +114,7 @@ module Hyrum
       formats = Formats::FORMATS
       description = 'Output format. Supported formats are:'
       supported   = formats.join(', ')
-      parser.on('-f FORMAT', '--format FORMAT', formats, description, supported) do |format|
+      parser.on('-f FORMAT', '--format FORMAT', formats, description, supported, "(default: text)") do |format|
         options[:format] = format
       end
     end
