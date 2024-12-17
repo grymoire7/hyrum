@@ -17,6 +17,9 @@ module Hyrum
     messages = message_generator.generate
     output = formatter.format(messages)
     puts output
+  rescue ScriptOptionsError => e
+    puts e.message
+    exit
   end
 end
 

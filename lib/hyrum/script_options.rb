@@ -3,6 +3,8 @@
 require 'optparse'
 
 module Hyrum
+  class ScriptOptionsError < StandardError; end
+
   class ScriptOptions
     MANDATORY_OPTIONS = %i[message].freeze
 
@@ -22,16 +24,11 @@ module Hyrum
       set_dynamic_defaults
       options
     rescue OptionParser::InvalidOption => e
-      err = "Invalid option: #{e.message}"
+      raise ScriptOptionsError.new("Invalid option: #{e.message}")
     rescue OptionParser::MissingArgument => e
-      err = "Missing argument for option: #{e.message}"
+      raise ScriptOptionsError.new("Missing argument for option: #{e.message}")
     rescue OptionParser::InvalidArgument => e
-      err = "Invalid argument for option: #{e.message}"
-    ensure
-      if err
-        puts err
-        exit
-      end
+      raise ScriptOptionsError.new("Invalid argument for option: #{e.message}")
     end
 
     private
