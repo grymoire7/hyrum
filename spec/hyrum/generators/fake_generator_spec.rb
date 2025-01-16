@@ -19,11 +19,11 @@ RSpec.describe Hyrum::Generators::FakeGenerator do
 
       it 'includes expected error messages' do
         fake_messages = generator.generate
-        expect(fake_messages['e404']).to include("We couldn't locate the resource you were looking for.")
-        expect(fake_messages['e418']).to include("I'm a teapot")
-        expect(fake_messages['e500']).to include("Internal Server Error")
-        expect(fake_messages['e503']).to include("Service Unavailable")
-        expect(fake_messages['e504']).to include("Gateway Timeout")
+        expect(fake_messages['e404']).to include("Not Found: The requested resource could not be located")
+        expect(fake_messages['e418']).to include("I'm a teapot: Server refuses to brew coffee with a teapot")
+        expect(fake_messages['e500']).to include("Internal Server Error: Something went wrong on our end")
+        expect(fake_messages['e503']).to include("Service Unavailable: Server temporarily unavailable")
+        expect(fake_messages['e504']).to include("Gateway Timeout: Upstream server timed out")
       end
     end
 
@@ -51,7 +51,7 @@ RSpec.describe Hyrum::Generators::FakeGenerator do
 
       it 'limits number to available messages' do
         result = described_class.new(key: '500', number: 10).generate
-        expect(result.length).to eq(2) # e500 only has 2 messages
+        expect(result.length).to eq(5) # each error code has 5 messages
       end
     end
   end
