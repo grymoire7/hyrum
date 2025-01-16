@@ -44,7 +44,15 @@ module Hyrum
       end
 
       def generate
-        JSON.parse(FAKE_MESSAGES)
+        messages = JSON.parse(FAKE_MESSAGES)
+        key = options[:key]&.downcase
+        number = (options[:number] || 1).to_i
+
+        return messages unless key
+
+        key_with_prefix = key.start_with?('e') ? key : "e#{key}"
+        available_messages = messages[key_with_prefix] || []
+        available_messages.sample([number, available_messages.length].min)
       end
     end
   end
