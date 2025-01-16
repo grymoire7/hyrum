@@ -86,7 +86,7 @@ if you want to see output quickly, you can use the `-s fake` option to use a fak
 service provider that will generate stock responses.
 
 ```bash
-hyrum -s fake -f ruby -m "anything here"
+hyrum -s fake -f ruby -k "404" -n 5
 ```
 
 You don't even need to install the gem to use Hyrum, fake service provider or not.

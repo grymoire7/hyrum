@@ -52,6 +52,7 @@ module Hyrum
       format_options(parser)
       message_options(parser)
       message_key_options(parser)
+      number_options(parser)
       ai_service_options(parser)
       on_tail_options(parser)
     end
@@ -91,10 +92,12 @@ module Hyrum
     end
 
     def message_options(parser)
-      parser.on('-m MESSAGE', '--message MESSAGE', 'Status message (required)') do |message|
+      parser.on('-m MESSAGE', '--message MESSAGE', 'Status message (required unless fake)') do |message|
         options[:message] = message
       end
+    end
 
+    def number_options(parser)
       options[:number] = 5
 
       parser.on('-n NUMBER', '--number NUMBER', Integer, 'Number of messages to generate (default: 5)',) do |number|
