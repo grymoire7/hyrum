@@ -52,7 +52,8 @@ RSpec.describe Hyrum::Generators::FakeGenerator do
       it 'limits number to available messages' do
         messages = JSON.parse(described_class::FAKE_MESSAGES)
         max_messages = messages['e500'].length
-        result = described_class.new(key: '500', number: 10).generate
+        requested_messages = max_messages + 1
+        result = described_class.new(key: '500', number: requested_messages).generate
         expect(result.length).to eq(max_messages)
       end
     end
