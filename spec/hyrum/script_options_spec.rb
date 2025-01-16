@@ -69,5 +69,15 @@ RSpec.describe Hyrum::ScriptOptions do
         expect { script_options.parse }.to raise_error(Hyrum::ScriptOptionsError, /Invalid argument for option:/)
       end
     end
+
+    context 'with number option for fake service' do
+      it 'returns the specified number of messages' do
+        args = ['-s', 'fake', '-k', '404', '-n', '3']
+        script_options = Hyrum::ScriptOptions.new(args)
+        options = script_options.parse
+
+        expect(options[:number]).to eq(3)
+      end
+    end
   end
 end
