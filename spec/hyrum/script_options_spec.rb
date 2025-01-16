@@ -19,11 +19,18 @@ RSpec.describe Hyrum::ScriptOptions do
         end
 
         context 'with missing mandatory option' do
-            it 'raises a Hyrum::ScriptOptionsError' do
-                args = ['-s', 'fake']
+            it 'raises a Hyrum::ScriptOptionsError when not using fake service' do
+                args = ['-s', 'openai']
                 script_options = Hyrum::ScriptOptions.new(args)
 
                 expect { script_options.parse }.to raise_error(Hyrum::ScriptOptionsError, /Missing argument for option:/)
+            end
+
+            it 'allows missing message option when using fake service' do
+                args = ['-s', 'fake']
+                script_options = Hyrum::ScriptOptions.new(args)
+
+                expect { script_options.parse }.not_to raise_error
             end
         end
 
