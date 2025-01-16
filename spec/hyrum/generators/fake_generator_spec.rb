@@ -37,6 +37,16 @@ RSpec.describe Hyrum::Generators::FakeGenerator do
         expect(result.first).to be_a(String)
       end
 
+      it 'generates different numbers of messages based on the number option' do
+        [1, 3, 5].each do |num|
+          generator = described_class.new(key: '404', number: num)
+          result = generator.generate
+          expect(result.length).to eq(num)
+          expect(result.uniq.length).to eq(num) # Ensure messages are unique
+          expect(result.all? { |msg| msg.include?('Not Found') }).to be true
+        end
+      end
+
       it 'accepts key with or without e prefix' do
         with_e = described_class.new(key: 'e404', number: 1).generate
         without_e = described_class.new(key: '404', number: 1).generate
