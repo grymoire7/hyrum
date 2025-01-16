@@ -39,12 +39,10 @@ module Hyrum
     end
 
     def enforce_mandatory_options
-      return if options[:ai_service] == :fake
-
-      missing = MANDATORY_OPTIONS.select { |param| options[param].nil? }
-      return if missing.empty?
-
-      raise OptionParser::MissingArgument, missing.join(', ')
+      if options[:ai_service] != :fake
+        missing = MANDATORY_OPTIONS.select { |param| options[param].nil? }
+        raise OptionParser::MissingArgument, missing.join(', ') unless missing.empty?
+      end
     end
 
     def define_options(parser)
