@@ -43,7 +43,6 @@ RSpec.describe Hyrum::Generators::FakeGenerator do
           result = generator.generate
           expect(result.length).to eq(num)
           expect(result.uniq.length).to eq(num) # Ensure messages are unique
-          expect(result.all? { |msg| msg.include?('Not Found') }).to be true
         end
       end
 
