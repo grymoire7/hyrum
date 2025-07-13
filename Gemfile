@@ -6,6 +6,8 @@ source 'https://rubygems.org'
 # gem "gen-ai" # , "~> 0.4.3"
 gem 'ruby-openai', '~> 7.3'
 gem 'zeitwerk', '~> 2.7'
+gem 'dry-struct', '~> 1.8'
+gem 'dry-validation', '~> 1.11'
 
 group :development, :test do
   # Static analysis for code quality [https://rubocop.org/]

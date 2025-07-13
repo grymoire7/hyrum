@@ -84,8 +84,6 @@ module Hyrum
     end
 
     def message_key_options(parser)
-      options[:key] = :status
-
       parser.on('-k KEY', '--key KEY', 'Message key (default: status)') do |key|
         options[:key] = key.to_sym
       end
@@ -98,8 +96,6 @@ module Hyrum
     end
 
     def number_options(parser)
-      options[:number] = 5
-
       parser.on('-n NUMBER', '--number NUMBER', Integer, 'Number of messages to generate (default: 5)',) do |number|
         options[:number] = number.to_i
       end
@@ -112,8 +108,6 @@ module Hyrum
     end
 
     def format_options(parser)
-      options[:format] = :text
-
       formats = Formats::FORMATS
       description = 'Output format. Supported formats are:'
       supported   = formats.join(', ')

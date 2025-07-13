@@ -93,7 +93,7 @@ You don't even need to install the gem to use Hyrum, fake service provider or no
 You can run the executable directly from a cloned repository.
 
 ```bash
-./exec/hyrum -s fake -f ruby -m "anything here"
+./bin/hyrum -s fake -f ruby -m "anything here"
 ```
 
 ## Configruation
