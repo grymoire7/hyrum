@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'openai'
+# require 'openai'  # Temporarily commented out during migration to ruby_llm
 require 'json'
 require 'erb'
 
