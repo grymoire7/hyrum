@@ -43,6 +43,6 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
 
   # gem.add_dependency 'gen-ai', '~> 0.4'
-  gem.add_dependency 'ruby-openai', '~> 7.3'
+  gem.add_dependency 'ruby_llm', '~> 1.9'
   gem.add_dependency 'zeitwerk', '~> 2.7'
 end
