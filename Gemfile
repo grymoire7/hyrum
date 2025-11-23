@@ -6,6 +6,7 @@ source 'https://rubygems.org'
 # gem "gen-ai" # , "~> 0.4.3"
 gem 'dry-struct', '~> 1.8'
 gem 'dry-validation', '~> 1.11'
+gem 'matrix', '~> 0.4'
 gem 'ruby_llm', '~> 1.9'
 gem 'zeitwerk', '~> 2.7'
 
