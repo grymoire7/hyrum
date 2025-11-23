@@ -1,37 +1,59 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Hyrum::Generators::MessageGenerator do
-  let(:valid_options_openai) { { ai_service: :openai } }
-  let(:valid_options_ollama) { { ai_service: :ollama } }
-  let(:valid_options_fake) { { ai_service: :fake } }
-  let(:invalid_options) { { ai_service: :invalid } }
-
   describe '.create' do
-    context 'with valid openai service' do
-      it 'returns an instance of OpenaiGenerator' do
-        generator = described_class.create(valid_options_openai)
-        expect(generator).to be_instance_of(Hyrum::Generators::OpenaiGenerator)
-      end
+    it 'returns FakeGenerator for fake service' do
+      options = { ai_service: :fake }
+      generator = described_class.create(options)
+      expect(generator).to be_a(Hyrum::Generators::FakeGenerator)
     end
 
-    context 'with valid ollama service' do
-      it 'returns an instance of OpenaiGenerator' do
-        generator = described_class.create(valid_options_ollama)
-        expect(generator).to be_instance_of(Hyrum::Generators::OpenaiGenerator)
-      end
+    it 'returns AiGenerator for openai service' do
+      options = { ai_service: :openai, ai_model: :'gpt-4o-mini', message: 'test', key: :e418, number: 3, verbose: false }
+      generator = described_class.create(options)
+      expect(generator).to be_a(Hyrum::Generators::AiGenerator)
     end
 
-    context 'with valid fake service' do
-      it 'returns an instance of FakeGenerator' do
-        generator = described_class.create(valid_options_fake)
-        expect(generator).to be_instance_of(Hyrum::Generators::FakeGenerator)
-      end
+    it 'returns AiGenerator for anthropic service' do
+      options = { ai_service: :anthropic, ai_model: :'claude-sonnet-4', message: 'test', key: :e418, number: 3, verbose: false }
+      generator = described_class.create(options)
+      expect(generator).to be_a(Hyrum::Generators::AiGenerator)
     end
 
-    context 'with invalid service' do
-      it 'raises an ArgumentError' do
-        expect { described_class.create(invalid_options) }.to raise_error(ArgumentError, "Invalid AI service: #{invalid_options[:ai_service]}")
-      end
+    it 'returns AiGenerator for gemini service' do
+      options = { ai_service: :gemini, ai_model: :'gemini-2.0-flash-exp', message: 'test', key: :e418, number: 3, verbose: false }
+      generator = described_class.create(options)
+      expect(generator).to be_a(Hyrum::Generators::AiGenerator)
+    end
+
+    it 'returns AiGenerator for ollama service' do
+      options = { ai_service: :ollama, ai_model: :llama3, message: 'test', key: :e418, number: 3, verbose: false }
+      generator = described_class.create(options)
+      expect(generator).to be_a(Hyrum::Generators::AiGenerator)
+    end
+  end
+
+  describe 'AI_SERVICES constant' do
+    it 'includes all supported providers' do
+      expect(Hyrum::Generators::AI_SERVICES).to include(
+        :openai, :anthropic, :gemini, :ollama, :mistral,
+        :deepseek, :perplexity, :openrouter, :vertexai,
+        :bedrock, :gpustack, :fake
+      )
+    end
+  end
+
+  describe 'AI_MODEL_DEFAULTS constant' do
+    it 'has defaults for all providers' do
+      expect(Hyrum::Generators::AI_MODEL_DEFAULTS).to include(
+        openai: :'gpt-4o-mini',
+        anthropic: :'claude-sonnet-4',
+        gemini: :'gemini-2.0-flash-exp',
+        ollama: :llama3,
+        fake: :fake
+      )
     end
   end
 end

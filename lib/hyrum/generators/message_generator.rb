@@ -2,27 +2,37 @@
 
 module Hyrum
   module Generators
-    AI_SERVICES = %i[openai ollama fake].freeze
+    AI_SERVICES = %i[
+      openai anthropic gemini ollama mistral deepseek
+      perplexity openrouter vertexai bedrock gpustack fake
+    ].freeze
 
     AI_MODEL_DEFAULTS = {
       openai: :'gpt-4o-mini',
+      anthropic: :'claude-sonnet-4',
+      gemini: :'gemini-2.0-flash-exp',
       ollama: :llama3,
+      mistral: :'mistral-small-latest',
+      deepseek: :'deepseek-chat',
+      perplexity: :'llama-3.1-sonar-small-128k-online',
+      openrouter: :'openai/gpt-4o-mini',
+      vertexai: :'gemini-2.0-flash-exp',
+      bedrock: :'anthropic.claude-sonnet-4-20250514-v1:0',
+      gpustack: :llama3,
       fake: :fake
     }.freeze
 
     GENERATOR_CLASSES = {
-      openai: OpenaiGenerator,
-      ollama: OpenaiGenerator,
       fake: FakeGenerator
+      # All other providers default to AiGenerator
     }.freeze
 
     class MessageGenerator
       def self.create(options)
-        unless GENERATOR_CLASSES.key?(options[:ai_service].to_sym)
-          raise ArgumentError, "Invalid AI service: #{options[:ai_service]}"
-        end
+        service = options[:ai_service].to_sym
 
-        generator_class = GENERATOR_CLASSES[options[:ai_service].to_sym]
+        # Get generator class, defaulting to AiGenerator for unlisted services
+        generator_class = GENERATOR_CLASSES.fetch(service, AiGenerator)
         generator_class.new(options)
       end
     end
