@@ -19,6 +19,10 @@ class CLIOptions < Dry::Struct
   attribute :number, Types::Integer.default(5)
   attribute :format, Types::Coercible::Symbol.default(:text)
   attribute :verbose, Types::Bool.default(false)
+  attribute :validate, Types::Bool.default(false)
+  attribute :min_quality, Types::Integer.default(70)
+  attribute :strict, Types::Bool.default(false)
+  attribute :show_scores, Types::Bool.default(false)
 
   def self.build_and_validate(input)
     # apply defaults and coercions
@@ -28,10 +32,11 @@ class CLIOptions < Dry::Struct
     contract_result = CLIOptionsContract.new.call(cli_options.to_h)
 
     if contract_result.errors.any?
-      error_message = contract_result.errors.to_h.each_with_object('') do |key, errors, err_str|
-        err_str << "Error with #{key}: #{errors.join(', ')}\n"
+      error_messages = contract_result.errors.to_h.map do |key, errors|
+        error_text = errors.is_a?(Array) ? errors.join(', ') : errors
+        "Error with #{key}: #{error_text}"
       end
-      raise ScriptOptionsError, error_message
+      raise Hyrum::ScriptOptionsError, error_messages.join("\n")
     end
 
     contract_result
@@ -54,9 +59,10 @@ end
 class FormatterOptions < Dry::Struct
   attribute :format, Types::Coercible::Symbol
   attribute :verbose, Types::Bool
+  attribute :show_scores, Types::Bool
 
   def self.from_parent(parent)
-    new(parent.to_h.slice(:format, :verbose))
+    new(parent.to_h.slice(:format, :verbose, :show_scores))
   end
 end
 
@@ -69,10 +75,18 @@ class CLIOptionsContract < Dry::Validation::Contract
     required(:format).value(:symbol)
     optional(:verbose).value(:bool)
     optional(:message).maybe(:string)
+    optional(:validate).value(:bool)
+    optional(:min_quality).value(:integer)
+    optional(:strict).value(:bool)
+    optional(:show_scores).value(:bool)
   end
 
   rule(:number) do
     key.failure('must be > 0') if value && value <= 0
+  end
+
+  rule(:min_quality) do
+    key.failure('must be between 0 and 100') if value && (value < 0 || value > 100)
   end
 end
 

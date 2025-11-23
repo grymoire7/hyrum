@@ -11,7 +11,13 @@ module Hyrum
     attr_reader :options
 
     def initialize(args)
-      @options = { message: nil } # Initialize with nil to ensure key exists
+      @options = {
+        message: nil,
+        validate: false,
+        min_quality: 70,
+        strict: false,
+        show_scores: false
+      }
       @args = args
     end
 
@@ -56,6 +62,7 @@ module Hyrum
       message_key_options(parser)
       number_options(parser)
       ai_service_options(parser)
+      validation_options(parser)
       on_tail_options(parser)
     end
 
@@ -115,6 +122,24 @@ module Hyrum
       supported   = formats.join(', ')
       parser.on('-f FORMAT', '--format FORMAT', formats, description, supported, '(default: text)') do |format|
         options[:format] = format
+      end
+    end
+
+    def validation_options(parser)
+      parser.on('--validate', 'Enable quality validation (default: off)') do
+        options[:validate] = true
+      end
+
+      parser.on('--min-quality SCORE', Integer, 'Minimum quality score 0-100 (default: 70)') do |score|
+        options[:min_quality] = score
+      end
+
+      parser.on('--strict', 'Fail on quality issues instead of warning (default: false)') do
+        options[:strict] = true
+      end
+
+      parser.on('--show-scores', 'Include quality metrics in output (default: false)') do
+        options[:show_scores] = true
       end
     end
   end

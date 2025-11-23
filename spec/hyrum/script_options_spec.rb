@@ -81,5 +81,59 @@ RSpec.describe Hyrum::ScriptOptions do
         expect(options[:number]).to eq(3)
       end
     end
+
+    context 'with validation options' do
+      it 'parses --validate flag' do
+        args = %w[--validate -s fake -m test]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:validate]).to be true
+      end
+
+      it 'parses --min-quality with value' do
+        args = %w[--validate --min-quality 80 -s fake -m test]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:min_quality]).to eq(80)
+      end
+
+      it 'defaults min-quality to 70' do
+        args = %w[--validate -s fake -m test]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:min_quality]).to eq(70)
+      end
+
+      it 'parses --strict flag' do
+        args = %w[--validate --strict -s fake -m test]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:strict]).to be true
+      end
+
+      it 'parses --show-scores flag' do
+        args = %w[--validate --show-scores -s fake -m test]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:show_scores]).to be true
+      end
+
+      it 'defaults validate to false' do
+        args = %w[-s fake -m test]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:validate]).to be false
+      end
+
+      it 'rejects min-quality below 0' do
+        args = %w[--validate --min-quality -10 -s fake -m test]
+        parsed = Hyrum::ScriptOptions.new(args).parse
+        expect {
+          CLIOptions.build_and_validate(parsed)
+        }.to raise_error(Hyrum::ScriptOptionsError, /min_quality/)
+      end
+
+      it 'rejects min-quality above 100' do
+        args = %w[--validate --min-quality 150 -s fake -m test]
+        parsed = Hyrum::ScriptOptions.new(args).parse
+        expect {
+          CLIOptions.build_and_validate(parsed)
+        }.to raise_error(Hyrum::ScriptOptionsError, /min_quality/)
+      end
+    end
   end
 end
