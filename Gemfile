@@ -24,10 +24,4 @@ group :development, :test do
 
   # Pry is a powerful alternative to the standard IRB shell for Ruby
   gem 'pry'
-
-  # VCR is a library for recording and replaying HTTP interactions
-  gem 'vcr', '~> 6.0'
-
-  # WebMock allows stubbing HTTP requests and setting expectations on HTTP requests
-  gem 'webmock', '~> 3.0'
 end

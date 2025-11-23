@@ -1,8 +1,6 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.7)
-      public_suffix (>= 2.0.2, < 7.0)
     ast (2.4.2)
     base64 (0.2.0)
     bigdecimal (3.1.8)
@@ -10,9 +8,6 @@ GEM
       racc
     coderay (1.1.3)
     concurrent-ruby (1.3.5)
-    crack (1.0.0)
-      bigdecimal
-      rexml
     diff-lcs (1.5.1)
     dry-configurable (1.3.0)
       dry-core (~> 1.1)
@@ -65,7 +60,6 @@ GEM
       net-http (~> 0.5)
     faraday-retry (2.3.2)
       faraday (~> 2.0)
-    hashdiff (1.1.2)
     ice_nine (0.11.2)
     json (2.8.2)
     language_server-protocol (3.17.0.3)
@@ -82,12 +76,10 @@ GEM
     pry (0.15.0)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    public_suffix (6.0.1)
     racc (1.8.1)
     rainbow (3.1.1)
     rake (13.2.1)
     regexp_parser (2.9.3)
-    rexml (3.3.9)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -129,12 +121,6 @@ GEM
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
     uri (1.1.1)
-    vcr (6.3.1)
-      base64
-    webmock (3.24.0)
-      addressable (>= 2.8.0)
-      crack (>= 0.3.2)
-      hashdiff (>= 0.4.0, < 2.0.0)
     zeitwerk (2.7.1)
 
 PLATFORMS
@@ -150,8 +136,6 @@ DEPENDENCIES
   rspec (~> 3.0)
   rubocop
   ruby_llm (~> 1.9)
-  vcr (~> 6.0)
-  webmock (~> 3.0)
   zeitwerk (~> 2.7)
 
 BUNDLED WITH
