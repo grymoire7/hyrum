@@ -14,8 +14,8 @@ RSpec.describe Hyrum::Generators::FakeGenerator do
 
   describe '#generate' do
     context 'without key option' do
-      it 'returns parsed JSON of FAKE_MESSAGES' do
-        fake_messages = JSON.parse(Hyrum::Generators::FakeGenerator::FAKE_MESSAGES)
+      it 'returns parsed JSON from data file' do
+        fake_messages = JSON.parse(File.read(Hyrum::Generators::FakeGenerator::DATA_FILE))
         expect(generator.generate).to eq(fake_messages)
       end
 
@@ -64,7 +64,7 @@ RSpec.describe Hyrum::Generators::FakeGenerator do
       end
 
       it 'limits number to available messages' do
-        messages = JSON.parse(described_class::FAKE_MESSAGES)
+        messages = JSON.parse(File.read(described_class::DATA_FILE))
         max_messages = messages['e500'].length
         requested_messages = max_messages + 1
         result = described_class.new(key: '500', number: requested_messages).generate

@@ -1,8 +1,8 @@
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.1
+  TargetRubyVersion: 3.2
 
-Documentation:
+Style/Documentation:
   Enabled: false
 
 Gemspec/DevelopmentDependencies:
@@ -36,3 +36,11 @@ Layout/LineLength:
 Metrics/BlockLength:
   Exclude:
     - spec/**/*.rb
+
+Metrics/MethodLength:
+  Exclude:
+    - spec/**/*.rb
+
+Metrics/AbcSize:
+  Exclude:
+    - lib/hyrum.rb

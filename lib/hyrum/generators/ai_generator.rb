@@ -5,6 +5,20 @@ require 'ruby_llm'
 module Hyrum
   module Generators
     class AiGenerator
+      API_KEY_ENV_VARS = {
+        openai: 'OPENAI_API_KEY',
+        anthropic: 'ANTHROPIC_API_KEY',
+        gemini: 'GEMINI_API_KEY',
+        ollama: 'OLLAMA_API_BASE',
+        vertexai: 'GOOGLE_CLOUD_PROJECT',
+        bedrock: 'AWS_ACCESS_KEY_ID',
+        deepseek: 'DEEPSEEK_API_KEY',
+        mistral: 'MISTRAL_API_KEY',
+        perplexity: 'PERPLEXITY_API_KEY',
+        openrouter: 'OPENROUTER_API_KEY',
+        gpustack: 'GPUSTACK_API_KEY'
+      }.freeze
+
       attr_reader :options
 
       def initialize(options)
@@ -39,6 +53,7 @@ module Hyrum
         PROMPT
       end
 
+      # rubocop:disable Metrics/MethodLength
       def response_schema
         {
           type: 'object',
@@ -54,6 +69,7 @@ module Hyrum
           additionalProperties: false
         }
       end
+      # rubocop:enable Metrics/MethodLength
 
       def handle_configuration_error(error)
         puts "Configuration Error: #{error.message}"
@@ -69,20 +85,7 @@ module Hyrum
       end
 
       def api_key_env_var_name
-        case options[:ai_service]
-        when :openai then 'OPENAI_API_KEY'
-        when :anthropic then 'ANTHROPIC_API_KEY'
-        when :gemini then 'GEMINI_API_KEY'
-        when :ollama then 'OLLAMA_API_BASE'
-        when :vertexai then 'GOOGLE_CLOUD_PROJECT'
-        when :bedrock then 'AWS_ACCESS_KEY_ID'
-        when :deepseek then 'DEEPSEEK_API_KEY'
-        when :mistral then 'MISTRAL_API_KEY'
-        when :perplexity then 'PERPLEXITY_API_KEY'
-        when :openrouter then 'OPENROUTER_API_KEY'
-        when :gpustack then 'GPUSTACK_API_KEY'
-        else "#{options[:ai_service].to_s.upcase}_API_KEY"
-        end
+        API_KEY_ENV_VARS.fetch(options[:ai_service], "#{options[:ai_service].to_s.upcase}_API_KEY")
       end
     end
   end

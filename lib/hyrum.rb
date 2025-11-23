@@ -77,6 +77,7 @@ class CLIOptionsContract < Dry::Validation::Contract
 end
 
 module Hyrum
+  # rubocop:disable Metrics/MethodLength
   def self.run(args)
     parsed_options = ScriptOptions.new(args).parse
     options = CLIOptions.build_and_validate(parsed_options)
@@ -99,6 +100,7 @@ module Hyrum
     puts e.message
     exit 1
   end
+  # rubocop:enable Metrics/MethodLength
 end
 
 loader.eager_load

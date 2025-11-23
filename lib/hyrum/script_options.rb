@@ -11,10 +11,11 @@ module Hyrum
     attr_reader :options
 
     def initialize(args)
-      @options = { message: nil }  # Initialize with nil to ensure key exists
+      @options = { message: nil } # Initialize with nil to ensure key exists
       @args = args
     end
 
+    # rubocop:disable Metrics/MethodLength
     def parse
       OptionParser.new do |parser|
         define_options(parser)
@@ -30,6 +31,7 @@ module Hyrum
     rescue OptionParser::InvalidArgument => e
       raise ScriptOptionsError, "Invalid argument for option: #{e.message}"
     end
+    # rubocop:enable Metrics/MethodLength
 
     private
 
