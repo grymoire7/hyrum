@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bundle install:*)",
+      "Bash(bundle exec rspec:*)",
+      "Bash(./bin/hyrum:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

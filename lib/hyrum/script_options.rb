@@ -24,11 +24,11 @@ module Hyrum
       set_dynamic_defaults
       options
     rescue OptionParser::InvalidOption => e
-      raise ScriptOptionsError.new("Invalid option: #{e.message}")
+      raise ScriptOptionsError, "Invalid option: #{e.message}"
     rescue OptionParser::MissingArgument => e
-      raise ScriptOptionsError.new("Missing argument for option: #{e.message}")
+      raise ScriptOptionsError, "Missing argument for option: #{e.message}"
     rescue OptionParser::InvalidArgument => e
-      raise ScriptOptionsError.new("Invalid argument for option: #{e.message}")
+      raise ScriptOptionsError, "Invalid argument for option: #{e.message}"
     end
 
     private
@@ -39,10 +39,10 @@ module Hyrum
     end
 
     def enforce_mandatory_options
-      if options[:ai_service] != :fake
-        missing = MANDATORY_OPTIONS.select { |param| options[param].nil? }
-        raise OptionParser::MissingArgument, missing.join(', ') unless missing.empty?
-      end
+      return unless options[:ai_service] != :fake
+
+      missing = MANDATORY_OPTIONS.select { |param| options[param].nil? }
+      raise OptionParser::MissingArgument, missing.join(', ') unless missing.empty?
     end
 
     def define_options(parser)
@@ -96,7 +96,7 @@ module Hyrum
     end
 
     def number_options(parser)
-      parser.on('-n NUMBER', '--number NUMBER', Integer, 'Number of messages to generate (default: 5)',) do |number|
+      parser.on('-n NUMBER', '--number NUMBER', Integer, 'Number of messages to generate (default: 5)') do |number|
         options[:number] = number.to_i
       end
     end
@@ -111,7 +111,7 @@ module Hyrum
       formats = Formats::FORMATS
       description = 'Output format. Supported formats are:'
       supported   = formats.join(', ')
-      parser.on('-f FORMAT', '--format FORMAT', formats, description, supported, "(default: text)") do |format|
+      parser.on('-f FORMAT', '--format FORMAT', formats, description, supported, '(default: text)') do |format|
         options[:format] = format
       end
     end

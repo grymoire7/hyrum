@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Hyrum::Generators::FakeGenerator do
@@ -19,11 +21,11 @@ RSpec.describe Hyrum::Generators::FakeGenerator do
 
       it 'includes expected error messages' do
         fake_messages = generator.generate
-        expect(fake_messages['e404']).to include("Not Found: The requested resource could not be located")
+        expect(fake_messages['e404']).to include('Not Found: The requested resource could not be located')
         expect(fake_messages['e418']).to include("I'm a teapot: Server refuses to brew coffee with a teapot")
-        expect(fake_messages['e500']).to include("Internal Server Error: Something went wrong on our end")
-        expect(fake_messages['e503']).to include("Service Unavailable: Server temporarily unavailable")
-        expect(fake_messages['e504']).to include("Gateway Timeout: Upstream server timed out")
+        expect(fake_messages['e500']).to include('Internal Server Error: Something went wrong on our end')
+        expect(fake_messages['e503']).to include('Service Unavailable: Server temporarily unavailable')
+        expect(fake_messages['e504']).to include('Gateway Timeout: Upstream server timed out')
       end
     end
 

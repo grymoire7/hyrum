@@ -28,7 +28,7 @@ class CLIOptions < Dry::Struct
     contract_result = CLIOptionsContract.new.call(cli_options.to_h)
 
     if contract_result.errors.any?
-      error_message = contract_result.errors.to_h.each_with_object("") do |key, errors, err_str|
+      error_message = contract_result.errors.to_h.each_with_object('') do |key, errors, err_str|
         err_str << "Error with #{key}: #{errors.join(', ')}\n"
       end
       raise ScriptOptionsError, error_message
@@ -72,7 +72,7 @@ class CLIOptionsContract < Dry::Validation::Contract
   end
 
   rule(:number) do
-    key.failure("must be > 0") if value && value <= 0
+    key.failure('must be > 0') if value && value <= 0
   end
 end
 
@@ -89,7 +89,7 @@ module Hyrum
       puts "Generator Options: #{generator_options.inspect}"
       puts "Formatter Options: #{formatter_options.inspect}"
     end
-    
+
     formatter = Formats::Formatter.new(formatter_options)
     message_generator = Generators::MessageGenerator.create(generator_options)
     messages = message_generator.generate

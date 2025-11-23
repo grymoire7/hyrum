@@ -4,10 +4,10 @@ source 'https://rubygems.org'
 
 # Generative AI toolset for Ruby
 # gem "gen-ai" # , "~> 0.4.3"
-gem 'ruby_llm', '~> 1.9'
-gem 'zeitwerk', '~> 2.7'
 gem 'dry-struct', '~> 1.8'
 gem 'dry-validation', '~> 1.11'
+gem 'ruby_llm', '~> 1.9'
+gem 'zeitwerk', '~> 2.7'
 
 group :development, :test do
   # Static analysis for code quality [https://rubocop.org/]

@@ -64,7 +64,7 @@ module Hyrum
 
       def handle_general_error(error)
         puts "Error: #{error.message}"
-        puts "Please check your configuration and try again."
+        puts 'Please check your configuration and try again.'
         exit 1
       end
 

@@ -1,20 +1,22 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Hyrum::ScriptOptions do
   describe '#parse' do
     context 'with valid options' do
       it 'parses the options correctly' do
-          args = ['-m', 'Hello', '-s', 'fake', '-d', 'model1', '-k', 'status', '-f', 'text', '--verbose', '-n', '7']
-          script_options = Hyrum::ScriptOptions.new(args)
-          options = script_options.parse
+        args = ['-m', 'Hello', '-s', 'fake', '-d', 'model1', '-k', 'status', '-f', 'text', '--verbose', '-n', '7']
+        script_options = Hyrum::ScriptOptions.new(args)
+        options = script_options.parse
 
-          expect(options[:message]).to eq('Hello')
-          expect(options[:ai_service]).to eq(:fake)
-          expect(options[:ai_model]).to eq(:model1)
-          expect(options[:key]).to eq(:status)
-          expect(options[:format]).to eq(:text)
-          expect(options[:verbose]).to be true
-          expect(options[:number]).to eq(7)
+        expect(options[:message]).to eq('Hello')
+        expect(options[:ai_service]).to eq(:fake)
+        expect(options[:ai_model]).to eq(:model1)
+        expect(options[:key]).to eq(:status)
+        expect(options[:format]).to eq(:text)
+        expect(options[:verbose]).to be true
+        expect(options[:number]).to eq(7)
       end
     end
 
