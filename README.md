@@ -26,10 +26,25 @@ no longer static, improving your api design.
 
 ## Example
 
+Generate coffee brewing error messages with OpenAI:
+
 ```bash
-hyrum --service openai --key e418 --format ruby \
-      --message "The server refuses the attempt to brew coffee with a teapot"
+hyrum --service openai \
+      --message "The server refuses the attempt to brew coffee with a teapot" \
+      --key e418 \
+      --format ruby
 ```
+
+Or use Anthropic's Claude:
+
+```bash
+hyrum --service anthropic \
+      --message "The server refuses the attempt to brew coffee with a teapot" \
+      --key e418 \
+      --format ruby
+```
+
+Output:
 
 ```ruby
 # frozen_string_literal: true
@@ -96,21 +111,39 @@ You can run the executable directly from a cloned repository.
 ./bin/hyrum -s fake -f ruby -m "anything here"
 ```
 
-## Configruation
+## Configuration
 
 ### OpenAI (`--service openai`)
-Hyrum requires an OpenAI API token to access the language models. The API token should be
+Hyrum requires an OpenAI API key to access the language models. The API key should be
 set as an environment variable as shown below.
 
 ```bash
-export OPENAI_ACCESS_TOKEN=your_open_ai_token
+export OPENAI_API_KEY=your_openai_api_key
 ```
 
-If you specify the `openai` service but no model, Hyrum will use the `gpt-o4-mini`.
+If you specify the `openai` service but no model, Hyrum will use `gpt-4o-mini`.
+
+### Anthropic (`--service anthropic`)
+To use Anthropic's Claude models, set your API key:
+
+```bash
+export ANTHROPIC_API_KEY=your_anthropic_api_key
+```
+
+Default model: `claude-sonnet-4`
+
+### Gemini (`--service gemini`)
+To use Google's Gemini models, set your API key:
+
+```bash
+export GEMINI_API_KEY=your_gemini_api_key
+```
+
+Default model: `gemini-2.0-flash-exp`
 
 ### Ollama (`--service ollama`)
 If you specify the `ollama` service, Hyrum will attempt to use the Ollama API
-running at `http://localhost:11434`. You can set the `OLLAMA_URL` environment
+running at `http://localhost:11434/v1`. You can set the `OLLAMA_API_BASE` environment
 variable to specify a different URL.
 
 Make sure your ollama server is running before using the `ollama` service.
@@ -122,9 +155,31 @@ ollama serve
 Use `ollama list` to see the available models. For more information on using
 ollama and downloading models, see the [ollama repository](http://ollama.com).
 
+Default model: `llama3`
+
+### Other Providers
+
+Hyrum supports all providers available in [ruby_llm](https://github.com/crmne/ruby_llm),
+including:
+- **Mistral** (`--service mistral`) - Set `MISTRAL_API_KEY`
+- **DeepSeek** (`--service deepseek`) - Set `DEEPSEEK_API_KEY`
+- **Perplexity** (`--service perplexity`) - Set `PERPLEXITY_API_KEY`
+- **OpenRouter** (`--service openrouter`) - Set `OPENROUTER_API_KEY`
+- **Vertex AI** (`--service vertexai`) - Set `GOOGLE_CLOUD_PROJECT` and `GOOGLE_CLOUD_LOCATION`
+- **AWS Bedrock** (`--service bedrock`) - Uses AWS credential chain or set `AWS_ACCESS_KEY_ID`
+- **GPUStack** (`--service gpustack`) - Set `GPUSTACK_API_BASE` and `GPUSTACK_API_KEY`
+
+See the [ruby_llm configuration docs](https://ruby-llm.com/configuration) for detailed
+setup instructions for each provider.
+
 ## Supported formats and AI services
 
-See [Usage](#usage) for a list of supported formats and AI services.
+**Formats:** ruby, javascript, python, java, text, json
+
+**AI Services:** openai, anthropic, gemini, ollama, mistral, deepseek, perplexity,
+openrouter, vertexai, bedrock, gpustack, fake
+
+See [Configuration](#configuration) for setup details for each service.
 
 ## Compatibility
 
