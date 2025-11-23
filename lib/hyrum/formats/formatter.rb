@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'erb'
+
 module Hyrum
   module Formats
     FORMATS = %i[ruby javascript python java text json].freeze
