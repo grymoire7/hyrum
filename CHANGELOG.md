@@ -37,6 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed `OpenaiGenerator` to `AiGenerator` for implementation-agnostic naming
 - Simplified generator implementation using ruby_llm's unified API
 - Test suite now uses RubyLLM-level mocking instead of VCR HTTP cassettes
+- **Optimized default models for cost-efficiency**:
+  - Anthropic: `claude-sonnet-4` → `claude-haiku-20250514` (~10x cheaper, perfect for simple text tasks)
+  - Bedrock: Sonnet → Haiku version (same cost savings)
+  - For simple message generation, cheaper models provide excellent results
 - **Code Quality Improvements**:
   - Extracted fake messages data to external JSON file (improved maintainability)
   - Refactored API key environment variable mapping to use constant hash

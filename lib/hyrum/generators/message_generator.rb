@@ -9,7 +9,7 @@ module Hyrum
 
     AI_MODEL_DEFAULTS = {
       openai: :'gpt-4o-mini',
-      anthropic: :'claude-sonnet-4',
+      anthropic: :'claude-haiku-20250514',
       gemini: :'gemini-2.0-flash-exp',
       ollama: :llama3,
       mistral: :'mistral-small-latest',
@@ -17,7 +17,7 @@ module Hyrum
       perplexity: :'llama-3.1-sonar-small-128k-online',
       openrouter: :'openai/gpt-4o-mini',
       vertexai: :'gemini-2.0-flash-exp',
-      bedrock: :'anthropic.claude-sonnet-4-20250514-v1:0',
+      bedrock: :'anthropic.claude-3-haiku-20240307-v1:0',
       gpustack: :llama3,
       fake: :fake
     }.freeze

@@ -17,7 +17,7 @@ RSpec.describe Hyrum::Generators::MessageGenerator do
     end
 
     it 'returns AiGenerator for anthropic service' do
-      options = { ai_service: :anthropic, ai_model: :'claude-sonnet-4', message: 'test', key: :e418, number: 3, verbose: false }
+      options = { ai_service: :anthropic, ai_model: :'claude-haiku-20250514', message: 'test', key: :e418, number: 3, verbose: false }
       generator = described_class.create(options)
       expect(generator).to be_a(Hyrum::Generators::AiGenerator)
     end
@@ -49,7 +49,7 @@ RSpec.describe Hyrum::Generators::MessageGenerator do
     it 'has defaults for all providers' do
       expect(Hyrum::Generators::AI_MODEL_DEFAULTS).to include(
         openai: :'gpt-4o-mini',
-        anthropic: :'claude-sonnet-4',
+        anthropic: :'claude-haiku-20250514',
         gemini: :'gemini-2.0-flash-exp',
         ollama: :llama3,
         fake: :fake

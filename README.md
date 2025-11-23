@@ -130,7 +130,7 @@ To use Anthropic's Claude models, set your API key:
 export ANTHROPIC_API_KEY=your_anthropic_api_key
 ```
 
-Default model: `claude-sonnet-4`
+Default model: `claude-haiku-20250514`
 
 ### Gemini (`--service gemini`)
 To use Google's Gemini models, set your API key:

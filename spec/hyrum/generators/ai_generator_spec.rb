@@ -81,7 +81,7 @@ RSpec.describe Hyrum::Generators::AiGenerator do
 
   describe 'provider support' do
     it 'works with anthropic provider' do
-      anthropic_options = options.merge(ai_service: :anthropic, ai_model: :'claude-sonnet-4')
+      anthropic_options = options.merge(ai_service: :anthropic, ai_model: :'claude-haiku-20250514')
       expected_content = { 'e418' => ['Message 1', 'Message 2', 'Message 3'] }
 
       mock_ruby_llm_chat(content: expected_content)
@@ -90,7 +90,7 @@ RSpec.describe Hyrum::Generators::AiGenerator do
       result = generator.generate
 
       expect(result).to eq(expected_content)
-      expect(RubyLLM).to have_received(:chat).with(model: 'claude-sonnet-4', provider: :anthropic)
+      expect(RubyLLM).to have_received(:chat).with(model: 'claude-haiku-20250514', provider: :anthropic)
     end
 
     it 'works with gemini provider' do
