@@ -37,6 +37,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed `OpenaiGenerator` to `AiGenerator` for implementation-agnostic naming
 - Simplified generator implementation using ruby_llm's unified API
 - Test suite now uses RubyLLM-level mocking instead of VCR HTTP cassettes
+- **Code Quality Improvements**:
+  - Extracted fake messages data to external JSON file (improved maintainability)
+  - Refactored API key environment variable mapping to use constant hash
+  - Reduced FakeGenerator from 298 to 36 lines
+  - Reduced AiGenerator cyclomatic complexity from 12 to 1
+  - All RuboCop warnings resolved
 
 ### Removed
 
