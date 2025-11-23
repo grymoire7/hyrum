@@ -6,5 +6,4 @@ $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/../lib")
 require 'bundler/setup'
 require 'hyrum'
 
-# Hyrum::CLI.start(ARGV)
 Hyrum.run(ARGV)
