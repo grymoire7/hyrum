@@ -12,7 +12,7 @@ module Types
 end
 
 class CLIOptions < Dry::Struct
-  attribute :message, Types::String
+  attribute :message, Types::String.optional
   attribute :key, Types::Coercible::Symbol.default(:status)
   attribute :ai_service, Types::Coercible::Symbol.default(:fake)
   attribute :ai_model, Types::Coercible::Symbol
@@ -39,7 +39,7 @@ class CLIOptions < Dry::Struct
 end
 
 class GeneratorOptions < Dry::Struct
-  attribute :message, Types::String
+  attribute :message, Types::String.optional
   attribute :key, Types::Coercible::Symbol
   attribute :ai_service, Types::Coercible::Symbol
   attribute :ai_model, Types::Coercible::Symbol

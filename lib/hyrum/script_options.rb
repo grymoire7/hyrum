@@ -11,7 +11,7 @@ module Hyrum
     attr_reader :options
 
     def initialize(args)
-      @options = {}
+      @options = { message: nil }  # Initialize with nil to ensure key exists
       @args = args
     end
 

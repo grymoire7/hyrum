@@ -304,7 +304,10 @@ module Hyrum
 
         key_with_prefix = key.start_with?('e') ? key : "e#{key}"
         available_messages = messages[key_with_prefix] || []
-        available_messages.sample([number, available_messages.length].min)
+        selected_messages = available_messages.sample([number, available_messages.length].min)
+
+        # Return as a hash to match expected format
+        { options[:key] => selected_messages }
       end
     end
   end
