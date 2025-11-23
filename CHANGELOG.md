@@ -52,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - VCR test cassettes (replaced with direct RubyLLM mocking)
 - `OpenaiGenerator` class (replaced by `AiGenerator`)
+- **Dependencies**: `vcr` and `webmock` gems (no longer needed with RubyLLM-level mocking)
 
 ### Migration Guide
 
