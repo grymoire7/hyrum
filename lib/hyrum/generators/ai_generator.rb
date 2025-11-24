@@ -28,7 +28,17 @@ module Hyrum
       def generate
         response = chat.ask(prompt)
         puts "AI response: #{response.inspect}" if options[:verbose]
-        response.content
+
+        # Prepend the original message to the generated variations
+        # RubyLLM returns string keys, but our options use symbols
+        result = response.content.dup
+        key_str = options[:key].to_s
+        if result[key_str].is_a?(Array)
+          result[key_str] = [options[:message]] + result[key_str]
+        end
+
+        # Convert string keys to symbols for consistency with the rest of hyrum
+        result.transform_keys(&:to_sym)
       rescue RubyLLM::ConfigurationError => e
         handle_configuration_error(e)
       rescue RubyLLM::Error => e

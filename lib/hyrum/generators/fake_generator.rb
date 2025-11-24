@@ -13,7 +13,7 @@ module Hyrum
 
       def generate
         messages = load_messages
-        key = options[:key]&.downcase
+        key = options[:key]&.to_s&.downcase
         number = (options[:number] || 1).to_i
 
         return messages unless key
@@ -21,6 +21,9 @@ module Hyrum
         key_with_prefix = key.start_with?('e') ? key : "e#{key}"
         available_messages = messages[key_with_prefix] || []
         selected_messages = available_messages.sample([number, available_messages.length].min)
+
+        # Prepend the original message if provided
+        selected_messages = [options[:message]] + selected_messages if options[:message]
 
         # Return as a hash to match expected format
         { options[:key] => selected_messages }

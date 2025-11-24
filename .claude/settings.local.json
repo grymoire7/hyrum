@@ -3,7 +3,8 @@
     "allow": [
       "Bash(bundle install:*)",
       "Bash(bundle exec rspec:*)",
-      "Bash(./bin/hyrum:*)"
+      "Bash(./bin/hyrum:*)",
+      "mcp__plugin_episodic-memory_episodic-memory__search"
     ],
     "deny": [],
     "ask": []

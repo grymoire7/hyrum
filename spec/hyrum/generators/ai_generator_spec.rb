@@ -16,7 +16,7 @@ RSpec.describe Hyrum::Generators::AiGenerator do
 
   describe '#generate' do
     it 'generates messages via ruby_llm' do
-      expected_content = {
+      ai_generated_content = {
         'e418' => [
           'Invalid Brewing Method',
           'Teapot not designed for coffee brewing',
@@ -24,12 +24,22 @@ RSpec.describe Hyrum::Generators::AiGenerator do
         ]
       }
 
-      mock_ruby_llm_chat(content: expected_content)
+      # Expected result includes the original message prepended
+      expected_result = {
+        e418: [
+          'Server refuses to brew coffee with a teapot',
+          'Invalid Brewing Method',
+          'Teapot not designed for coffee brewing',
+          'Please use a suitable brewing device'
+        ]
+      }
+
+      mock_ruby_llm_chat(content: ai_generated_content)
 
       generator = described_class.new(options)
       result = generator.generate
 
-      expect(result).to eq(expected_content)
+      expect(result).to eq(expected_result)
     end
 
     it 'outputs debug info when verbose is true' do
@@ -82,27 +92,29 @@ RSpec.describe Hyrum::Generators::AiGenerator do
   describe 'provider support' do
     it 'works with anthropic provider' do
       anthropic_options = options.merge(ai_service: :anthropic, ai_model: :'claude-haiku-20250514')
-      expected_content = { 'e418' => ['Message 1', 'Message 2', 'Message 3'] }
+      ai_generated_content = { 'e418' => ['Message 1', 'Message 2', 'Message 3'] }
+      expected_result = { e418: ['Server refuses to brew coffee with a teapot', 'Message 1', 'Message 2', 'Message 3'] }
 
-      mock_ruby_llm_chat(content: expected_content)
+      mock_ruby_llm_chat(content: ai_generated_content)
 
       generator = described_class.new(anthropic_options)
       result = generator.generate
 
-      expect(result).to eq(expected_content)
+      expect(result).to eq(expected_result)
       expect(RubyLLM).to have_received(:chat).with(model: 'claude-haiku-20250514', provider: :anthropic)
     end
 
     it 'works with gemini provider' do
       gemini_options = options.merge(ai_service: :gemini, ai_model: :'gemini-2.0-flash-exp')
-      expected_content = { 'e418' => ['Message 1', 'Message 2', 'Message 3'] }
+      ai_generated_content = { 'e418' => ['Message 1', 'Message 2', 'Message 3'] }
+      expected_result = { e418: ['Server refuses to brew coffee with a teapot', 'Message 1', 'Message 2', 'Message 3'] }
 
-      mock_ruby_llm_chat(content: expected_content)
+      mock_ruby_llm_chat(content: ai_generated_content)
 
       generator = described_class.new(gemini_options)
       result = generator.generate
 
-      expect(result).to eq(expected_content)
+      expect(result).to eq(expected_result)
       expect(RubyLLM).to have_received(:chat).with(model: 'gemini-2.0-flash-exp', provider: :gemini)
     end
   end
