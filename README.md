@@ -129,9 +129,13 @@ This exits with a non-zero status code if quality is below 75.
 The validator measures two key metrics:
 
 1. **Semantic Similarity** (≥85% required): Ensures each variation preserves the meaning of your original message
+   - Uses embedding models (OpenAI, Google, etc.) when available
+   - Falls back to word overlap heuristic if no embedding provider configured
 2. **Lexical Diversity** (30-70% required): Ensures variations use different words from each other
 
 The overall quality score is a weighted combination of both metrics.
+
+**Embedding Support**: Semantic similarity works best with embedding models. Configure any embedding provider (OpenAI, Google, etc.) and Hyrum will use it automatically. If no embedding provider is configured, validation still works using a word overlap heuristic.
 
 ## Installation
 Install the gem and add to the application's Gemfile by executing:
