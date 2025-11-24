@@ -8,16 +8,17 @@ module Hyrum
     class SemanticSimilarity
       EMBEDDING_PROVIDERS = %i[openai].freeze
 
-      attr_reader :variations, :ai_service, :ai_model
+      attr_reader :original_message, :variations, :ai_service, :ai_model
 
-      def initialize(variations, ai_service, ai_model)
+      def initialize(original_message, variations, ai_service, ai_model)
+        @original_message = original_message
         @variations = variations
         @ai_service = ai_service
         @ai_model = ai_model
       end
 
       def calculate
-        return 100.0 if variations.empty? || variations.size == 1
+        return 100.0 if variations.empty?
 
         if supports_embeddings?
           calculate_with_embeddings
@@ -33,11 +34,13 @@ module Hyrum
       private
 
       def calculate_with_embeddings
-        embeddings = get_embeddings(variations)
-        similarities = []
+        # Get embedding for original message
+        original_embedding = get_embeddings([original_message]).first
+        variation_embeddings = get_embeddings(variations)
 
-        embeddings.combination(2).each do |emb1, emb2|
-          similarities << cosine_similarity(emb1, emb2)
+        # Compare each variation to the original message
+        similarities = variation_embeddings.map do |var_embedding|
+          cosine_similarity(original_embedding, var_embedding)
         end
 
         # Convert to percentage (0-100)
@@ -46,13 +49,14 @@ module Hyrum
 
       def calculate_with_fallback
         # Simple word overlap heuristic when embeddings not available
-        word_sets = variations.map { |v| v.downcase.scan(/\w+/).to_set }
-        similarities = []
+        original_words = original_message.downcase.scan(/\w+/).to_set
 
-        word_sets.combination(2).each do |set1, set2|
-          intersection = set1.intersection(set2).size.to_f
-          union = set1.union(set2).size.to_f
-          similarities << (union.zero? ? 1.0 : intersection / union)
+        # Compare each variation to the original message
+        similarities = variations.map do |variation|
+          var_words = variation.downcase.scan(/\w+/).to_set
+          intersection = original_words.intersection(var_words).size.to_f
+          union = original_words.union(var_words).size.to_f
+          union.zero? ? 1.0 : intersection / union
         end
 
         (similarities.sum / similarities.size * 100).round(2)

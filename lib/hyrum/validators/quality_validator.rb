@@ -8,9 +8,10 @@ module Hyrum
       MIN_DIVERSITY_THRESHOLD = 30.0
       MIN_SIMILARITY_THRESHOLD = 85.0
 
-      attr_reader :messages, :options
+      attr_reader :original_message, :messages, :options
 
-      def initialize(messages, options)
+      def initialize(original_message, messages, options)
+        @original_message = original_message
         @messages = messages
         @options = options
       end
@@ -49,6 +50,7 @@ module Hyrum
 
       def calculate_semantic_similarity(variations)
         calculator = SemanticSimilarity.new(
+          original_message,
           variations,
           options[:ai_service],
           options[:ai_model]

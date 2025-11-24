@@ -13,16 +13,18 @@ RSpec.describe Hyrum::Validators::QualityValidator do
 
   describe '#validate' do
     it 'returns a ValidationResult' do
-      variations = { status: ['Error 1', 'Error 2', 'Error 3'] }
-      validator = described_class.new(variations, options)
+      original_message = 'Server error'
+      variations = { status: ['Server problem', 'Server issue', 'Server failure'] }
+      validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
       expect(result).to be_a(Hyrum::Validators::ValidationResult)
     end
 
     it 'calculates scores for variations' do
-      variations = { status: ['Error occurred', 'Problem detected', 'Issue found'] }
-      validator = described_class.new(variations, options)
+      original_message = 'Error occurred'
+      variations = { status: ['Problem detected', 'Issue found', 'Failure encountered'] }
+      validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
       expect(result.score).to be_between(0.0, 100.0)
@@ -31,9 +33,10 @@ RSpec.describe Hyrum::Validators::QualityValidator do
     end
 
     it 'fails when lexical diversity threshold not met' do
-      # Use nearly identical variations
+      original_message = 'Error'
+      # Use nearly identical variations (low diversity)
       variations = { status: ['Error', 'Error', 'Error'] }
-      validator = described_class.new(variations, options)
+      validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
       expect(result.lexical_diversity).to eq(0.0)
@@ -42,9 +45,10 @@ RSpec.describe Hyrum::Validators::QualityValidator do
     end
 
     it 'fails when semantic similarity threshold not met' do
-      # Use completely different words for low semantic similarity
+      original_message = 'Server error'
+      # Use completely different messages (low similarity to original)
       variations = { status: ['Alpha', 'Bravo', 'Charlie'] }
-      validator = described_class.new(variations, options)
+      validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
       expect(result.semantic_similarity).to be < 85
@@ -52,28 +56,31 @@ RSpec.describe Hyrum::Validators::QualityValidator do
     end
 
     it 'adds warnings for threshold violations' do
+      original_message = 'Test'
       # Test that warnings are generated
       variations = { status: ['X', 'X', 'X'] }
-      validator = described_class.new(variations, options)
+      validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
       expect(result.warnings).not_to be_empty
     end
 
     it 'handles multiple message keys' do
+      original_message = 'Error occurred'
       variations = {
-        status: ['Error occurred', 'Problem detected'],
+        status: ['Problem detected', 'Issue found'],
         warning: ['Caution advised', 'Warning issued']
       }
-      validator = described_class.new(variations, options)
+      validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
       expect(result).to be_a(Hyrum::Validators::ValidationResult)
     end
 
     it 'handles single variation gracefully' do
-      variations = { status: ['Server error'] }
-      validator = described_class.new(variations, options)
+      original_message = 'Server error'
+      variations = { status: ['Server problem'] }
+      validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
       expect(result.passed?).to be true
@@ -81,8 +88,9 @@ RSpec.describe Hyrum::Validators::QualityValidator do
     end
 
     it 'handles empty variations gracefully' do
+      original_message = 'Test message'
       variations = {}
-      validator = described_class.new(variations, options)
+      validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
       expect(result.passed?).to be true
