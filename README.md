@@ -73,24 +73,34 @@ end
 ## Usage
 
 ```
-❯ hyrum --help # OR from the repo as `./exe/hyrum --help`
+❯ hyrum --help # OR from the repo as `./bin/hyrum --help`
 Usage: hyrum [options]
     -v, --[no-]verbose               Run verbosely
     -f, --format FORMAT              Output format. Supported formats are:
                                      ruby, javascript, python, java, text, json
-    -m, --message MESSAGE            Status message
-    -k, --key KEY                    Message key
-    -s, --service SERVICE            AI service: one of openai, ollama, fake
+                                     (default: text)
+    -m, --message MESSAGE            Status message (required unless fake)
+    -k, --key KEY                    Message key (default: status)
+    -n, --number NUMBER              Number of messages to generate (default: 5)
+    -s, --service SERVICE            AI service: one of openai, anthropic, gemini, ollama,
+                                     mistral, deepseek, perplexity, openrouter, vertexai,
+                                     bedrock, gpustack, fake (default: fake)
     -d, --model MODEL                AI model: must be a valid model for the selected service
+        --validate                   Enable quality validation (default: off)
+        --min-quality SCORE          Minimum quality score 0-100 (default: 70)
+        --strict                     Fail on quality issues instead of warning (default: false)
+        --show-scores                Include quality metrics in output (default: false)
     -h, --help                       Show this message
         --version                    Show version
 ```
 
-## Quality Validation
+## Quality validation
 
-Hyrum can validate the quality of generated message variations to ensure they achieve Hyrum's Law goal: variations preserve the original message's meaning while using different wording.
+Hyrum can validate the quality of generated message variations to ensure they
+achieve Hyrum's Law goal: variations preserve the original message's meaning
+while using different wording.
 
-### Basic Validation
+### Basic validation
 
 ```bash
 hyrum --validate -s openai -m "Server error" -f ruby --show-scores
@@ -107,14 +117,14 @@ This includes quality metrics as comments in the output:
 # ... rest of generated code
 ```
 
-### Validation Options
+### Validation options
 
 - `--validate` - Enable quality validation (default: off)
 - `--min-quality SCORE` - Minimum acceptable quality score 0-100 (default: 70)
 - `--strict` - Exit with error if quality check fails (default: warning only)
 - `--show-scores` - Include quality metrics in output (default: false)
 
-### Strict Mode for CI/CD
+### Strict mode for automated workflows
 
 Use strict mode to enforce quality in automated workflows:
 
@@ -124,7 +134,7 @@ hyrum --validate --strict --min-quality 75 -s openai -m "Error message" -f ruby
 
 This exits with a non-zero status code if quality is below 75.
 
-### How It Works
+### How it works
 
 The validator measures two key metrics:
 
@@ -135,7 +145,10 @@ The validator measures two key metrics:
 
 The overall quality score is a weighted combination of both metrics.
 
-**Embedding Support**: Semantic similarity works best with embedding models. Configure any embedding provider (OpenAI, Google, etc.) and Hyrum will use it automatically. If no embedding provider is configured, validation still works using a word overlap heuristic.
+**Embedding Support**: Semantic similarity works best with embedding models.
+Configure any embedding provider (OpenAI, Google, etc.) and Hyrum will use it
+automatically. If no embedding provider is configured, validation still works
+using a word overlap heuristic.
 
 ## Installation
 Install the gem and add to the application's Gemfile by executing:
@@ -208,7 +221,7 @@ ollama and downloading models, see the [ollama repository](http://ollama.com).
 
 Default model: `llama3`
 
-### Other Providers
+### Other providers
 
 Hyrum supports all providers available in [ruby_llm](https://github.com/crmne/ruby_llm),
 including:
