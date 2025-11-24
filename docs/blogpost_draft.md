@@ -30,7 +30,8 @@ I built Hyrum to solve this. It's a Ruby CLI gem that uses AI to
 generate variations of status messages, ensuring users never become
 dependent on exact wording. But more interesting than what it does is
 how it evolved from a single-provider tool into a multi-provider
-platform that cut costs by 10x and reduced code complexity from 12 to 1.
+platform that cut costs by 10x, reduced code complexity from 12 to 1,
+and added quality validation for AI-generated content.
 
 ## The problem with predictable messages
 
@@ -182,6 +183,101 @@ This matters for maintainability. Six months from now, when I need to
 add a new provider or debug an edge case, the git history explains not
 only what changed but why.
 
+## Validating non-deterministic output
+
+Getting AI to generate message variations was the easy part. The harder
+question was: how do you know if the variations are any good?
+
+This is where Hyrum gets interesting as a portfolio project. Anyone can
+wire up an AI API and generate text. Building a system that validates
+the quality of non-deterministic output requires deeper thinking about
+what "quality" even means in this context.
+
+### Defining useful variation
+
+A good variation needs two properties:
+
+1. **Semantic similarity** - It preserves the original message's meaning
+2. **Lexical diversity** - It uses different wording than other variations
+
+These goals exist in tension. Perfect similarity means identical text.
+Perfect diversity means unrelated messages. The sweet spot is variations
+that mean the same thing but say it differently.
+
+I implemented a quality validation system that measures both metrics
+and combines them into an overall quality score. This lets you validate
+generated variations automatically, ensuring they achieve Hyrum's Law
+goal of preventing dependency on exact wording.
+
+### The initial design mistake
+
+My first implementation compared variations to each other. Generate
+five variations, measure how similar they are as a group, done. This
+seemed logical until I tested it.
+
+The problem: variations could be highly similar to each other but
+completely different from the original message. A set of variations
+about network timeouts would score well even if the original message
+was about authentication failures. They were diverse from each other,
+but wrong.
+
+The fix was obvious in hindsight: compare each variation to the
+original message, not to other variations. Semantic similarity measures
+how well each variation preserves the user's intent. Lexical diversity
+measures how much the variations differ from each other. Two separate
+concerns, two separate comparisons.
+
+### Semantic similarity with embeddings
+
+Measuring semantic similarity requires understanding meaning, not just
+matching words. "Server error" and "Internal server failure" share
+minimal text but convey the same concept. Simple string comparison
+would fail.
+
+The solution: embedding models. These convert text into high-dimensional
+vectors where semantically similar content clusters together. Calculate
+the cosine similarity between the original message's embedding and each
+variation's embedding, and you have a numeric score for how well meaning
+is preserved.
+
+I designed this to be provider-agnostic from the start, learning from
+the earlier migration experience. The validator uses `RubyLLM.embed()`
+which works with any provider that supports embeddings (OpenAI, Google,
+etc.). When embeddings aren't available, it falls back to a simpler
+word overlap heuristic.
+
+This graceful degradation was important. Users without embedding access
+still get validation, just with reduced accuracy. The feature doesn't
+silently fail or block users.
+
+### API design for optional features
+
+Quality validation needed to be opt-in. The core workflow is "generate
+variations and use them." Adding validation steps would slow things down
+and require configuration. It needed to enhance the workflow without
+disrupting it.
+
+The CLI design reflects this:
+
+```bash
+# Basic usage - no validation
+hyrum -s openai -m "Server error" -f ruby
+
+# Opt into validation
+hyrum -s openai -m "Server error" -f ruby --validate
+
+# Use in CI/CD with strict mode
+hyrum -s openai -m "Server error" -f ruby --validate --strict --min-quality 75
+```
+
+Validation is off by default. Enable it when you want quality metrics.
+Use `--strict` to fail builds when quality is too low. Use `--show-scores`
+to include metrics in generated output.
+
+Each flag serves a specific use case without cluttering the happy path.
+This is backward compatible and makes the feature discoverable through
+`--help` without overwhelming new users.
+
 ## What I learned
 
 ### Shipping a Ruby gem is more accessible than I expected
@@ -225,6 +321,47 @@ breaking changes. Adding backward compatibility for a handful of users
 creates technical debt that affects every future user. Sometimes the
 generous thing is to break things cleanly.
 
+### User feedback catches design flaws early
+
+My initial quality validation design seemed sound in theory. It measured
+variation quality as a group property. But the first test revealed the
+flaw: variations could be similar to each other while being completely
+unrelated to the original message.
+
+This is why you test with real examples before building the whole system.
+The fix (comparing to the original message) was trivial to implement
+early. It would have been painful to retrofit later after building an
+entire validation pipeline on the wrong assumption.
+
+The lesson: design mistakes are inevitable. What matters is catching them
+before they become weight-bearing walls in your architecture.
+
+### Graceful degradation beats hard dependencies
+
+Embedding models provide superior semantic similarity measurement. But
+requiring them would block users whose AI providers don't support
+embeddings. The word overlap fallback isn't as accurate, but it's
+better than nothing.
+
+This pattern appears throughout the gem. Can't access embeddings? Use
+heuristics. Provider doesn't support structured output? Parse text.
+Each graceful degradation expands the set of valid configurations.
+
+The alternative is failing fast with clear errors. Both approaches are
+valid, but for a tool that works across many providers, degradation
+creates a better experience than strict requirements.
+
+### Validation changes what "done" means
+
+Before quality validation, "done" meant "generates variations." After,
+it meant "generates variations that preserve meaning while varying
+wording." This shift changed the entire value proposition.
+
+The interesting part is that validation makes the AI output more
+trustworthy without requiring a better AI model. Same model, same cost,
+but now you have quantitative confidence in the results. That's the
+leverage of good metrics.
+
 ## The result
 
 Hyrum now supports 11 AI providers (OpenAI, Anthropic, Gemini, Ollama,
@@ -232,10 +369,18 @@ Mistral, DeepSeek, Perplexity, OpenRouter, Vertex AI, AWS Bedrock,
 GPUStack) through a unified interface. The codebase is simpler,
 tests are faster, and costs are 10x lower.
 
+Quality validation adds confidence without complexity. Generate variations,
+validate they preserve meaning while varying wording, and integrate the
+results into your codebase with quantitative quality metrics. The
+validation system works across all providers and degrades gracefully
+when embeddings aren't available.
+
 But the real achievement isn't the feature list. It's that the
-architecture can accommodate new providers without increasing complexity.
-When ruby_llm adds support for a new provider, Hyrum gets it for free.
-That's the payoff of choosing the right abstraction.
+architecture can accommodate new providers and capabilities without
+increasing complexity. When ruby_llm adds support for a new provider,
+Hyrum gets it for free. When embedding models improve, quality
+validation automatically benefits. That's the payoff of choosing the
+right abstractions.
 
 The project is [open source on GitHub](https://github.com/grymoire7/hyrum).
 If you're dealing with Hyrum's Law in your own APIs, or you're just
