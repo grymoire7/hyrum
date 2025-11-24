@@ -1,1 +1,14 @@
+<% if validation_result && show_scores -%>
+<%= JSON.pretty_generate({
+  quality: {
+    score: validation_result.score,
+    semantic_similarity: validation_result.semantic_similarity,
+    lexical_diversity: validation_result.lexical_diversity,
+    passed: validation_result.passed?,
+    warnings: validation_result.warnings
+  },
+  messages: messages
+}) %>
+<% else -%>
 <%= JSON.pretty_generate(messages) %>
+<% end -%>

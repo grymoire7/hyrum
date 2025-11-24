@@ -1,3 +1,12 @@
+<% if validation_result && show_scores -%>
+Quality Score: <%= validation_result.score %>/100
+- Semantic similarity: <%= validation_result.semantic_similarity %>% (variations preserve meaning)
+- Lexical diversity: <%= validation_result.lexical_diversity %>% (variation in wording)
+<% validation_result.warnings.each do |warning| -%>
+Warning: <%= warning %>
+<% end -%>
+
+<% end -%>
 <% messages.each do |key, values| -%>
 Messages for <%= key %>:
   <% values.each do |msg| -%>
