@@ -86,6 +86,53 @@ Usage: hyrum [options]
         --version                    Show version
 ```
 
+## Quality Validation
+
+Hyrum can validate the quality of generated message variations to ensure they achieve Hyrum's Law goal: variations preserve the original message's meaning while using different wording.
+
+### Basic Validation
+
+```bash
+hyrum --validate -s openai -m "Server error" -f ruby --show-scores
+```
+
+This includes quality metrics as comments in the output:
+
+```ruby
+# Quality Score: 82.5/100
+# - Semantic similarity: 94.0% (variations preserve meaning)
+# - Lexical diversity: 68.0% (variation in wording)
+
+# frozen_string_literal: true
+# ... rest of generated code
+```
+
+### Validation Options
+
+- `--validate` - Enable quality validation (default: off)
+- `--min-quality SCORE` - Minimum acceptable quality score 0-100 (default: 70)
+- `--strict` - Exit with error if quality check fails (default: warning only)
+- `--show-scores` - Include quality metrics in output (default: false)
+
+### Strict Mode for CI/CD
+
+Use strict mode to enforce quality in automated workflows:
+
+```bash
+hyrum --validate --strict --min-quality 75 -s openai -m "Error message" -f ruby
+```
+
+This exits with a non-zero status code if quality is below 75.
+
+### How It Works
+
+The validator measures two key metrics:
+
+1. **Semantic Similarity** (≥85% required): Ensures each variation preserves the meaning of your original message
+2. **Lexical Diversity** (30-70% required): Ensures variations use different words from each other
+
+The overall quality score is a weighted combination of both metrics.
+
 ## Installation
 Install the gem and add to the application's Gemfile by executing:
 
