@@ -15,6 +15,7 @@ RubyLLM.configure do |config|
   config.deepseek_api_key = ENV['DEEPSEEK_API_KEY'] if ENV['DEEPSEEK_API_KEY']
   config.perplexity_api_key = ENV['PERPLEXITY_API_KEY'] if ENV['PERPLEXITY_API_KEY']
   config.openrouter_api_key = ENV['OPENROUTER_API_KEY'] if ENV['OPENROUTER_API_KEY']
+  config.ollama_api_base = 'http://localhost:11434/v1'
   config.ollama_api_base = ENV['OLLAMA_API_BASE'] if ENV['OLLAMA_API_BASE']
   config.gpustack_api_base = ENV['GPUSTACK_API_BASE'] if ENV['GPUSTACK_API_BASE']
   config.gpustack_api_key = ENV['GPUSTACK_API_KEY'] if ENV['GPUSTACK_API_KEY']
