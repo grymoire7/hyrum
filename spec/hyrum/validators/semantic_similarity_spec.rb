@@ -19,8 +19,9 @@ RSpec.describe Hyrum::Validators::SemanticSimilarity do
       calculator = described_class.new(original, variations, :fake, :fake)
 
       allow(calculator).to receive(:supports_embeddings?).and_return(true)
-      allow(calculator).to receive(:get_embeddings).and_return(
-        [mock_embeddings[original]] + mock_embeddings.values_at(*variations)
+      # Mock returns all embeddings in one batch: [original, var1, var2]
+      allow(calculator).to receive(:get_embeddings).with([original] + variations).and_return(
+        [mock_embeddings[original], mock_embeddings['Server problem'], mock_embeddings['Server issue']]
       )
 
       score = calculator.calculate
@@ -33,8 +34,9 @@ RSpec.describe Hyrum::Validators::SemanticSimilarity do
       calculator = described_class.new(original, variations, :fake, :fake)
 
       allow(calculator).to receive(:supports_embeddings?).and_return(true)
-      allow(calculator).to receive(:get_embeddings).and_return(
-        [mock_embeddings[original]] + mock_embeddings.values_at(*variations)
+      # Mock returns all embeddings in one batch: [original, var1, var2]
+      allow(calculator).to receive(:get_embeddings).with([original] + variations).and_return(
+        [mock_embeddings[original], mock_embeddings['Connection timeout'], mock_embeddings['Connection timeout']]
       )
 
       score = calculator.calculate
@@ -47,7 +49,8 @@ RSpec.describe Hyrum::Validators::SemanticSimilarity do
       calculator = described_class.new(original, variations, :fake, :fake)
 
       allow(calculator).to receive(:supports_embeddings?).and_return(true)
-      allow(calculator).to receive(:get_embeddings).and_return(
+      # Mock returns all embeddings in one batch: [original, var1]
+      allow(calculator).to receive(:get_embeddings).with([original] + variations).and_return(
         [mock_embeddings[original], mock_embeddings[original]]
       )
 
@@ -74,18 +77,30 @@ RSpec.describe Hyrum::Validators::SemanticSimilarity do
   end
 
   describe '#supports_embeddings?' do
-    it 'returns true for OpenAI' do
+    it 'returns true when embedding models are available in registry' do
       calculator = described_class.new('test', [], :openai, :'gpt-4o-mini')
+
+      # Mock the model registry to have embedding models
+      allow(RubyLLM.models).to receive(:embedding_models).and_return([:some_model])
+
       expect(calculator.supports_embeddings?).to be true
     end
 
-    it 'returns false for Anthropic' do
+    it 'returns false when no embedding models in registry' do
       calculator = described_class.new('test', [], :anthropic, :'claude-haiku-20250514')
+
+      # Mock the model registry to have no embedding models
+      allow(RubyLLM.models).to receive(:embedding_models).and_return([])
+
       expect(calculator.supports_embeddings?).to be false
     end
 
-    it 'returns false for fake' do
+    it 'returns false when registry check fails' do
       calculator = described_class.new('test', [], :fake, :fake)
+
+      # Mock a registry error
+      allow(RubyLLM.models).to receive(:embedding_models).and_raise(StandardError)
+
       expect(calculator.supports_embeddings?).to be false
     end
   end

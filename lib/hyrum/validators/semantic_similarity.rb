@@ -6,8 +6,6 @@ require 'set'
 module Hyrum
   module Validators
     class SemanticSimilarity
-      EMBEDDING_PROVIDERS = %i[openai].freeze
-
       attr_reader :original_message, :variations, :ai_service, :ai_model
 
       def initialize(original_message, variations, ai_service, ai_model)
@@ -28,15 +26,24 @@ module Hyrum
       end
 
       def supports_embeddings?
-        EMBEDDING_PROVIDERS.include?(ai_service)
+        # Check if RubyLLM has any embedding models available in the current registry
+        # User is responsible for calling RubyLLM.models.refresh! if needed
+        RubyLLM.models.embedding_models.any?
+      rescue StandardError
+        # If we can't check the registry, assume embeddings aren't available
+        false
       end
 
       private
 
       def calculate_with_embeddings
-        # Get embedding for original message
-        original_embedding = get_embeddings([original_message]).first
-        variation_embeddings = get_embeddings(variations)
+        # Batch all texts together for efficient API call
+        all_texts = [original_message] + variations
+        all_embeddings = get_embeddings(all_texts)
+
+        # First embedding is the original, rest are variations
+        original_embedding = all_embeddings.first
+        variation_embeddings = all_embeddings[1..]
 
         # Compare each variation to the original message
         similarities = variation_embeddings.map do |var_embedding|
@@ -63,16 +70,12 @@ module Hyrum
       end
 
       def get_embeddings(texts)
-        # Use OpenAI embeddings API via RubyLLM
-        client = RubyLLM.embed(
-          model: 'text-embedding-3-small',
-          provider: :openai
-        )
+        # Use RubyLLM.embed with user's configured default embedding model
+        # Works with any provider (OpenAI, Google, Anthropic, etc.)
+        result = RubyLLM.embed(texts)
 
-        texts.map do |text|
-          response = client.embed(text)
-          response.embedding
-        end
+        # RubyLLM.embed returns a single result with vectors array
+        result.vectors
       rescue RubyLLM::Error => e
         # Fall back to heuristic if embedding fails
         warn "Embedding API failed: #{e.message}. Using fallback heuristic."

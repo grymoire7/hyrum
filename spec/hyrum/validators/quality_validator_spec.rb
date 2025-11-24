@@ -49,6 +49,10 @@ RSpec.describe Hyrum::Validators::QualityValidator do
       # Use completely different messages (low similarity to original)
       variations = { status: ['Alpha', 'Bravo', 'Charlie'] }
       validator = described_class.new(original_message, variations, options)
+
+      # Mock supports_embeddings to use fallback heuristic
+      allow_any_instance_of(Hyrum::Validators::SemanticSimilarity).to receive(:supports_embeddings?).and_return(false)
+
       result = validator.validate
 
       expect(result.semantic_similarity).to be < 85
