@@ -66,6 +66,18 @@ class FormatterOptions < Dry::Struct
   end
 end
 
+class ValidatorOptions < Dry::Struct
+  attribute :validate, Types::Bool
+  attribute :min_quality, Types::Integer
+  attribute :strict, Types::Bool
+  attribute :ai_service, Types::Coercible::Symbol
+  attribute :ai_model, Types::Coercible::Symbol
+
+  def self.from_parent(parent)
+    new(parent.to_h.slice(:validate, :min_quality, :strict, :ai_service, :ai_model))
+  end
+end
+
 class CLIOptionsContract < Dry::Validation::Contract
   params do
     required(:key).value(:symbol)
@@ -98,17 +110,42 @@ module Hyrum
 
     generator_options = GeneratorOptions.from_parent(options)
     formatter_options = FormatterOptions.from_parent(options)
+    validator_options = ValidatorOptions.from_parent(options)
 
     if options[:verbose]
       puts "Options: #{options.inspect}"
       puts "Generator Options: #{generator_options.inspect}"
       puts "Formatter Options: #{formatter_options.inspect}"
+      puts "Validator Options: #{validator_options.inspect}"
     end
 
+    # Generate messages
     formatter = Formats::Formatter.new(formatter_options)
     message_generator = Generators::MessageGenerator.create(generator_options)
     messages = message_generator.generate
-    output = formatter.format(messages)
+
+    # Validate if requested
+    validation_result = nil
+    if validator_options[:validate]
+      validator = Validators::QualityValidator.new(
+        options[:message],
+        messages,
+        validator_options.to_h
+      )
+      validation_result = validator.validate
+
+      if validation_result.failed? && validator_options[:strict]
+        warn "Quality validation failed:"
+        warn "  Score: #{validation_result.score}/100"
+        warn "  Semantic similarity: #{validation_result.semantic_similarity}%"
+        warn "  Lexical diversity: #{validation_result.lexical_diversity}%"
+        validation_result.warnings.each { |w| warn "  - #{w}" }
+        exit 1
+      end
+    end
+
+    # Format and output
+    output = formatter.format(messages, validation_result)
     puts output
   rescue ScriptOptionsError => e
     puts e.message
