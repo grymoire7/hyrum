@@ -19,10 +19,12 @@ so the user doesn't become dependent on the exact wording of the message?
 Also, we don't want to spend a lot of time writing variations of the same message.
 
 This is the use case Hyrum tries to solve. It uses an AI service (openai,
-ollama, etc.) to generate variations of a provided message. The generated
-variations are also formatted in the language/format of your choice (ruby,
-json, etc.). This code can then be used in your project to ensure messages are
-no longer static, improving your api design.
+ollama, etc.) to generate variations of a provided message. It can then
+valideate the quality of the variations to ensure they preserve the original
+message's meaning wile using different wording. The oupput is formatted in the
+language/format of your choice (ruby, json, etc.). This code can then be used
+in your project to ensure messages are no longer static, improving your api
+design.
 
 ## Example
 
@@ -251,7 +253,7 @@ This gem is compatible with Ruby 3.1 or greater.
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run
+After checking out the repo, run `bin/setup` to install gem dependencies. Then, run
 `rake spec` to run the tests.
 
 To install this gem onto your local machine, run `bundle exec rake install`. To
