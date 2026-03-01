@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'optparse'
+require "optparse"
 
 module Hyrum
   class ScriptOptionsError < StandardError; end
@@ -50,11 +50,11 @@ module Hyrum
       return unless options[:ai_service] != :fake
 
       missing = MANDATORY_OPTIONS.select { |param| options[param].nil? }
-      raise OptionParser::MissingArgument, missing.join(', ') unless missing.empty?
+      raise OptionParser::MissingArgument, missing.join(", ") unless missing.empty?
     end
 
     def define_options(parser)
-      parser.banner = 'Usage: hyrum [options]'
+      parser.banner = "Usage: hyrum [options]"
 
       verbosity_options(parser)
       format_options(parser)
@@ -67,12 +67,12 @@ module Hyrum
     end
 
     def on_tail_options(parser)
-      parser.on_tail('-h', '--help', 'Show this message') do
+      parser.on_tail("-h", "--help", "Show this message") do
         puts parser
         exit
       end
 
-      parser.on_tail('--version', 'Show version') do
+      parser.on_tail("--version", "Show version") do
         puts Hyrum::VERSION
         exit
       end
@@ -81,64 +81,64 @@ module Hyrum
     def ai_service_options(parser)
       options[:ai_service] = :fake
 
-      description = "AI service: one of #{Generators::AI_SERVICES.join(', ')} (default: fake)"
-      parser.on('-s SERVICE', '--service SERVICE', Generators::AI_SERVICES, description) do |service|
+      description = "AI service: one of #{Generators::AI_SERVICES.join(", ")} (default: fake)"
+      parser.on("-s SERVICE", "--service SERVICE", Generators::AI_SERVICES, description) do |service|
         options[:ai_service] = service.to_sym
       end
 
-      description = 'AI model: must be a valid model for the selected service'
-      parser.on('-d MODEL', '--model MODEL', description) do |model|
+      description = "AI model: must be a valid model for the selected service"
+      parser.on("-d MODEL", "--model MODEL", description) do |model|
         options[:ai_model] = model.to_sym
       end
     end
 
     def message_key_options(parser)
-      parser.on('-k KEY', '--key KEY', 'Message key (default: status)') do |key|
+      parser.on("-k KEY", "--key KEY", "Message key (default: status)") do |key|
         options[:key] = key.to_sym
       end
     end
 
     def message_options(parser)
-      parser.on('-m MESSAGE', '--message MESSAGE', 'Status message (required unless fake)') do |message|
+      parser.on("-m MESSAGE", "--message MESSAGE", "Status message (required unless fake)") do |message|
         options[:message] = message
       end
     end
 
     def number_options(parser)
-      parser.on('-n NUMBER', '--number NUMBER', Integer, 'Number of messages to generate (default: 5)') do |number|
+      parser.on("-n NUMBER", "--number NUMBER", Integer, "Number of messages to generate (default: 5)") do |number|
         options[:number] = number.to_i
       end
     end
 
     def verbosity_options(parser)
-      parser.on('-v', '--[no-]verbose', 'Run verbosely') do |v|
+      parser.on("-v", "--[no-]verbose", "Run verbosely") do |v|
         options[:verbose] = v
       end
     end
 
     def format_options(parser)
       formats = Formats::FORMATS
-      description = 'Output format. Supported formats are:'
-      supported   = formats.join(', ')
-      parser.on('-f FORMAT', '--format FORMAT', formats, description, supported, '(default: text)') do |format|
+      description = "Output format. Supported formats are:"
+      supported = formats.join(", ")
+      parser.on("-f FORMAT", "--format FORMAT", formats, description, supported, "(default: text)") do |format|
         options[:format] = format
       end
     end
 
     def validation_options(parser)
-      parser.on('--validate', 'Enable quality validation (default: off)') do
+      parser.on("--validate", "Enable quality validation (default: off)") do
         options[:validate] = true
       end
 
-      parser.on('--min-quality SCORE', Integer, 'Minimum quality score 0-100 (default: 70)') do |score|
+      parser.on("--min-quality SCORE", Integer, "Minimum quality score 0-100 (default: 70)") do |score|
         options[:min_quality] = score
       end
 
-      parser.on('--strict', 'Fail on quality issues instead of warning (default: false)') do
+      parser.on("--strict", "Fail on quality issues instead of warning (default: false)") do
         options[:strict] = true
       end
 
-      parser.on('--show-scores', 'Include quality metrics in output (default: false)') do
+      parser.on("--show-scores", "Include quality metrics in output (default: false)") do
         options[:show_scores] = true
       end
     end

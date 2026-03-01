@@ -3,7 +3,7 @@
 module Hyrum
   module Generators
     class FakeGenerator
-      DATA_FILE = File.expand_path('../data/fake_messages.json', __dir__)
+      DATA_FILE = File.expand_path("../data/fake_messages.json", __dir__)
 
       attr_reader :options
 
@@ -18,7 +18,7 @@ module Hyrum
 
         return messages unless key
 
-        key_with_prefix = key.start_with?('e') ? key : "e#{key}"
+        key_with_prefix = key.start_with?("e") ? key : "e#{key}"
         available_messages = messages[key_with_prefix] || []
         selected_messages = available_messages.sample([number, available_messages.length].min)
 
@@ -26,7 +26,7 @@ module Hyrum
         selected_messages = [options[:message]] + selected_messages if options[:message]
 
         # Return as a hash to match expected format
-        { options[:key] => selected_messages }
+        {options[:key] => selected_messages}
       end
 
       private

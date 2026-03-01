@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'set'
-
 module Hyrum
   module Validators
     class LexicalDiversity

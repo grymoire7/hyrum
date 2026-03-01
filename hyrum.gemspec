@@ -2,31 +2,31 @@
 
 # hyrum.gemspec
 
-require_relative 'lib/hyrum/version'
+require_relative "lib/hyrum/version"
 
 Gem::Specification.new do |gem|
-  gem.name          = 'hyrum'
-  gem.version       = Hyrum::VERSION
-  gem.summary       = 'A simple Ruby gem'
-  gem.authors       = ['Tracy Atteberry']
-  gem.email         = ['tracy@tracyatteberry.com']
-  gem.description   = "A multi-language code generator to cope with Hyrum's law"
-  gem.homepage      = 'https://github.com/grymoire7/hyrum'
-  gem.licenses      = ['MIT']
-  gem.required_ruby_version = '>= 3.2.0'
+  gem.name = "hyrum"
+  gem.version = Hyrum::VERSION
+  gem.summary = "A simple Ruby gem"
+  gem.authors = ["Tracy Atteberry"]
+  gem.email = ["tracy@tracyatteberry.com"]
+  gem.description = "A multi-language code generator to cope with Hyrum's law"
+  gem.homepage = "https://github.com/grymoire7/hyrum"
+  gem.licenses = ["MIT"]
+  gem.required_ruby_version = ">= 3.2.0"
 
-  gem.metadata['rubygems_mfa_required'] = 'true'
+  gem.metadata["rubygems_mfa_required"] = "true"
   # gem.metadata['homepage_uri'] = gem.homepage
   # gem.metadata['source_code_uri'] = gem.homepage
-  gem.metadata['changelog_uri'] = "#{gem.homepage}/blob/main/CHANGELOG.md"
+  gem.metadata["changelog_uri"] = "#{gem.homepage}/blob/main/CHANGELOG.md"
 
-  gem.extra_rdoc_files = Dir['README.md', 'CHANGELOG.md', 'LICENSE.txt']
+  gem.extra_rdoc_files = Dir["README.md", "CHANGELOG.md", "LICENSE.txt"]
   gem.rdoc_options += [
-    '--title', 'Hyrum - Hyrum\'s Law Code Generator',
-    '--main', 'README.md',
-    '--line-numbers',
-    '--inline-source',
-    '--quiet'
+    "--title", "Hyrum - Hyrum's Law Code Generator",
+    "--main", "README.md",
+    "--line-numbers",
+    "--inline-source",
+    "--quiet"
   ]
 
   # Specify which files should be added to the gem when it is released.
@@ -37,12 +37,12 @@ Gem::Specification.new do |gem|
   #       f.start_with?(*%w[bin/ test/ spec/ features/ .git .circleci appveyor Gemfile])
   #   end
   # end
-  gem.files = Dir.glob('lib/**/*') + Dir.glob('bin/**/*')
+  gem.files = Dir.glob("lib/**/*") + Dir.glob("bin/**/*")
 
-  gem.executables << 'hyrum'
-  gem.require_paths = ['lib']
+  gem.executables << "hyrum"
+  gem.require_paths = ["lib"]
 
   # gem.add_dependency 'gen-ai', '~> 0.4'
-  gem.add_dependency 'ruby_llm', '~> 1.9'
-  gem.add_dependency 'zeitwerk', '~> 2.7'
+  gem.add_dependency "ruby_llm", "~> 1.9"
+  gem.add_dependency "zeitwerk", "~> 2.7"
 end

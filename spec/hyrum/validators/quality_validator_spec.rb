@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe Hyrum::Validators::QualityValidator do
   let(:options) do
@@ -11,19 +11,19 @@ RSpec.describe Hyrum::Validators::QualityValidator do
     }
   end
 
-  describe '#validate' do
-    it 'returns a ValidationResult' do
-      original_message = 'Server error'
-      variations = { status: ['Server problem', 'Server issue', 'Server failure'] }
+  describe "#validate" do
+    it "returns a ValidationResult" do
+      original_message = "Server error"
+      variations = {status: ["Server problem", "Server issue", "Server failure"]}
       validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
       expect(result).to be_a(Hyrum::Validators::ValidationResult)
     end
 
-    it 'calculates scores for variations' do
-      original_message = 'Error occurred'
-      variations = { status: ['Problem detected', 'Issue found', 'Failure encountered'] }
+    it "calculates scores for variations" do
+      original_message = "Error occurred"
+      variations = {status: ["Problem detected", "Issue found", "Failure encountered"]}
       validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
@@ -32,10 +32,10 @@ RSpec.describe Hyrum::Validators::QualityValidator do
       expect(result.lexical_diversity).to be_between(0.0, 100.0)
     end
 
-    it 'fails when lexical diversity threshold not met' do
-      original_message = 'Error'
+    it "fails when lexical diversity threshold not met" do
+      original_message = "Error"
       # Use nearly identical variations (low diversity)
-      variations = { status: ['Error', 'Error', 'Error'] }
+      variations = {status: ["Error", "Error", "Error"]}
       validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
@@ -44,10 +44,10 @@ RSpec.describe Hyrum::Validators::QualityValidator do
       expect(result.warnings).not_to be_empty
     end
 
-    it 'fails when semantic similarity threshold not met' do
-      original_message = 'Server error'
+    it "fails when semantic similarity threshold not met" do
+      original_message = "Server error"
       # Use completely different messages (low similarity to original)
-      variations = { status: ['Alpha', 'Bravo', 'Charlie'] }
+      variations = {status: ["Alpha", "Bravo", "Charlie"]}
       validator = described_class.new(original_message, variations, options)
 
       # Mock supports_embeddings to use fallback heuristic
@@ -59,21 +59,21 @@ RSpec.describe Hyrum::Validators::QualityValidator do
       expect(result.passed?).to be false
     end
 
-    it 'adds warnings for threshold violations' do
-      original_message = 'Test'
+    it "adds warnings for threshold violations" do
+      original_message = "Test"
       # Test that warnings are generated
-      variations = { status: ['X', 'X', 'X'] }
+      variations = {status: ["X", "X", "X"]}
       validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
       expect(result.warnings).not_to be_empty
     end
 
-    it 'handles multiple message keys' do
-      original_message = 'Error occurred'
+    it "handles multiple message keys" do
+      original_message = "Error occurred"
       variations = {
-        status: ['Problem detected', 'Issue found'],
-        warning: ['Caution advised', 'Warning issued']
+        status: ["Problem detected", "Issue found"],
+        warning: ["Caution advised", "Warning issued"]
       }
       validator = described_class.new(original_message, variations, options)
       result = validator.validate
@@ -81,9 +81,9 @@ RSpec.describe Hyrum::Validators::QualityValidator do
       expect(result).to be_a(Hyrum::Validators::ValidationResult)
     end
 
-    it 'handles single variation gracefully' do
-      original_message = 'Server error'
-      variations = { status: ['Server problem'] }
+    it "handles single variation gracefully" do
+      original_message = "Server error"
+      variations = {status: ["Server problem"]}
       validator = described_class.new(original_message, variations, options)
       result = validator.validate
 
@@ -91,8 +91,8 @@ RSpec.describe Hyrum::Validators::QualityValidator do
       expect(result.warnings).to include(match(/one variation/i))
     end
 
-    it 'handles empty variations gracefully' do
-      original_message = 'Test message'
+    it "handles empty variations gracefully" do
+      original_message = "Test message"
       variations = {}
       validator = described_class.new(original_message, variations, options)
       result = validator.validate

@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-require 'ruby_llm'
+require "ruby_llm"
 
 module Hyrum
   module Generators
     class AiGenerator
       API_KEY_ENV_VARS = {
-        openai: 'OPENAI_API_KEY',
-        anthropic: 'ANTHROPIC_API_KEY',
-        gemini: 'GEMINI_API_KEY',
-        ollama: 'OLLAMA_API_BASE',
-        vertexai: 'GOOGLE_CLOUD_PROJECT',
-        bedrock: 'AWS_ACCESS_KEY_ID',
-        deepseek: 'DEEPSEEK_API_KEY',
-        mistral: 'MISTRAL_API_KEY',
-        perplexity: 'PERPLEXITY_API_KEY',
-        openrouter: 'OPENROUTER_API_KEY',
-        gpustack: 'GPUSTACK_API_KEY'
+        openai: "OPENAI_API_KEY",
+        anthropic: "ANTHROPIC_API_KEY",
+        gemini: "GEMINI_API_KEY",
+        ollama: "OLLAMA_API_BASE",
+        vertexai: "GOOGLE_CLOUD_PROJECT",
+        bedrock: "AWS_ACCESS_KEY_ID",
+        deepseek: "DEEPSEEK_API_KEY",
+        mistral: "MISTRAL_API_KEY",
+        perplexity: "PERPLEXITY_API_KEY",
+        openrouter: "OPENROUTER_API_KEY",
+        gpustack: "GPUSTACK_API_KEY"
       }.freeze
 
       attr_reader :options
@@ -66,11 +66,11 @@ module Hyrum
       # rubocop:disable Metrics/MethodLength
       def response_schema
         {
-          type: 'object',
+          type: "object",
           properties: {
             options[:key] => {
-              type: 'array',
-              items: { type: 'string' },
+              type: "array",
+              items: {type: "string"},
               minItems: options[:number],
               maxItems: options[:number]
             }
@@ -90,7 +90,7 @@ module Hyrum
 
       def handle_general_error(error)
         puts "Error: #{error.message}"
-        puts 'Please check your configuration and try again.'
+        puts "Please check your configuration and try again."
         exit 1
       end
 

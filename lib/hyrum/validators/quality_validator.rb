@@ -28,8 +28,8 @@ module Hyrum
         overall_score = (semantic_score * SIMILARITY_WEIGHT) + (lexical_score * DIVERSITY_WEIGHT)
 
         passed = overall_score >= options[:min_quality] &&
-                 lexical_score >= MIN_DIVERSITY_THRESHOLD &&
-                 semantic_score >= MIN_SIMILARITY_THRESHOLD
+          lexical_score >= MIN_DIVERSITY_THRESHOLD &&
+          semantic_score >= MIN_SIMILARITY_THRESHOLD
 
         warnings = build_warnings(semantic_score, lexical_score)
 
@@ -56,7 +56,7 @@ module Hyrum
           options[:ai_model]
         )
         calculator.calculate
-      rescue StandardError => e
+      rescue => e
         # Fall back to 100% on error (assume semantic similarity is good)
         warn "Semantic similarity calculation failed: #{e.message}"
         100.0
@@ -87,8 +87,8 @@ module Hyrum
           semantic_similarity: 0.0,
           lexical_diversity: 0.0,
           passed: true,
-          details: { variation_count: 0 },
-          warnings: ['No variations to validate']
+          details: {variation_count: 0},
+          warnings: ["No variations to validate"]
         )
       end
 
@@ -98,8 +98,8 @@ module Hyrum
           semantic_similarity: 0.0,
           lexical_diversity: 0.0,
           passed: true,
-          details: { variation_count: messages.values.flatten.size },
-          warnings: ['Only one variation - nothing to compare']
+          details: {variation_count: messages.values.flatten.size},
+          warnings: ["Only one variation - nothing to compare"]
         )
       end
     end

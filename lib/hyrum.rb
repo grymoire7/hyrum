@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-require 'optparse'
-require 'zeitwerk'
-require 'dry-struct'
-require 'dry-validation'
-require 'ruby_llm'
+require "optparse"
+require "zeitwerk"
+require "dry-struct"
+require "dry-validation"
+require "ruby_llm"
 
 # Configure RubyLLM with environment variables
 RubyLLM.configure do |config|
-  config.openai_api_key = ENV['OPENAI_API_KEY'] if ENV['OPENAI_API_KEY']
-  config.anthropic_api_key = ENV['ANTHROPIC_API_KEY'] if ENV['ANTHROPIC_API_KEY']
-  config.gemini_api_key = ENV['GEMINI_API_KEY'] if ENV['GEMINI_API_KEY']
-  config.mistral_api_key = ENV['MISTRAL_API_KEY'] if ENV['MISTRAL_API_KEY']
-  config.deepseek_api_key = ENV['DEEPSEEK_API_KEY'] if ENV['DEEPSEEK_API_KEY']
-  config.perplexity_api_key = ENV['PERPLEXITY_API_KEY'] if ENV['PERPLEXITY_API_KEY']
-  config.openrouter_api_key = ENV['OPENROUTER_API_KEY'] if ENV['OPENROUTER_API_KEY']
-  config.ollama_api_base = 'http://localhost:11434/v1'
-  config.ollama_api_base = ENV['OLLAMA_API_BASE'] if ENV['OLLAMA_API_BASE']
-  config.gpustack_api_base = ENV['GPUSTACK_API_BASE'] if ENV['GPUSTACK_API_BASE']
-  config.gpustack_api_key = ENV['GPUSTACK_API_KEY'] if ENV['GPUSTACK_API_KEY']
+  config.openai_api_key = ENV["OPENAI_API_KEY"] if ENV["OPENAI_API_KEY"]
+  config.anthropic_api_key = ENV["ANTHROPIC_API_KEY"] if ENV["ANTHROPIC_API_KEY"]
+  config.gemini_api_key = ENV["GEMINI_API_KEY"] if ENV["GEMINI_API_KEY"]
+  config.mistral_api_key = ENV["MISTRAL_API_KEY"] if ENV["MISTRAL_API_KEY"]
+  config.deepseek_api_key = ENV["DEEPSEEK_API_KEY"] if ENV["DEEPSEEK_API_KEY"]
+  config.perplexity_api_key = ENV["PERPLEXITY_API_KEY"] if ENV["PERPLEXITY_API_KEY"]
+  config.openrouter_api_key = ENV["OPENROUTER_API_KEY"] if ENV["OPENROUTER_API_KEY"]
+  config.ollama_api_base = "http://localhost:11434/v1"
+  config.ollama_api_base = ENV["OLLAMA_API_BASE"] if ENV["OLLAMA_API_BASE"]
+  config.gpustack_api_base = ENV["GPUSTACK_API_BASE"] if ENV["GPUSTACK_API_BASE"]
+  config.gpustack_api_key = ENV["GPUSTACK_API_KEY"] if ENV["GPUSTACK_API_KEY"]
 end
 
 loader = Zeitwerk::Loader.for_gem
@@ -50,7 +50,7 @@ class CLIOptions < Dry::Struct
 
     if contract_result.errors.any?
       error_messages = contract_result.errors.to_h.map do |key, errors|
-        error_text = errors.is_a?(Array) ? errors.join(', ') : errors
+        error_text = errors.is_a?(Array) ? errors.join(", ") : errors
         "Error with #{key}: #{error_text}"
       end
       raise Hyrum::ScriptOptionsError, error_messages.join("\n")
@@ -111,11 +111,11 @@ class CLIOptionsContract < Dry::Validation::Contract
   end
 
   rule(:number) do
-    key.failure('must be > 0') if value && value <= 0
+    key.failure("must be > 0") if value && value <= 0
   end
 
   rule(:min_quality) do
-    key.failure('must be between 0 and 100') if value && (value < 0 || value > 100)
+    key.failure("must be between 0 and 100") if value && (value < 0 || value > 100)
   end
 end
 

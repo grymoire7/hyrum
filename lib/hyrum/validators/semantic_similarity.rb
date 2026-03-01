@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'matrix'
-require 'set'
+require "matrix"
 
 module Hyrum
   module Validators
@@ -29,7 +28,7 @@ module Hyrum
         # Check if RubyLLM has any embedding models available in the current registry
         # User is responsible for calling RubyLLM.models.refresh! if needed
         RubyLLM.models.embedding_models.any?
-      rescue StandardError
+      rescue
         # If we can't check the registry, assume embeddings aren't available
         false
       end

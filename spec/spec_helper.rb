@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'hyrum'
+require "hyrum"
 
 # Load support files
-Dir[File.join(__dir__, 'support', '**', '*.rb')].each { |f| require f }
+Dir[File.join(__dir__, "support", "**", "*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   # Include mock helpers
   config.include RubyLLMMocks
   # Enable flags like --only-failures and --next-failure
-  config.example_status_persistence_file_path = '.rspec_status'
+  config.example_status_persistence_file_path = ".rspec_status"
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   # config.disable_monkey_patching!
@@ -23,7 +23,7 @@ RSpec.configure do |config|
     # Use the documentation formatter for detailed output,
     # unless a formatter has already been configured
     # (e.g. via a command-line flag).
-    config.default_formatter = 'doc'
+    config.default_formatter = "doc"
   end
 
   # This allows you to limit a spec run to individual examples or groups
@@ -38,8 +38,8 @@ RSpec.configure do |config|
   original_stdout = $stdout
 
   config.before(:all) do
-    $stderr = File.open(File::NULL, 'w')
-    $stdout = File.open(File::NULL, 'w')
+    $stderr = File.open(File::NULL, "w")
+    $stdout = File.open(File::NULL, "w")
   end
 
   config.after(:all) do
