@@ -125,6 +125,7 @@ module Hyrum
       end
     end
 
+    # rubocop:disable Metrics/MethodLength
     def validation_options(parser)
       parser.on("--validate", "Enable quality validation (default: off)") do
         options[:validate] = true
@@ -142,5 +143,6 @@ module Hyrum
         options[:show_scores] = true
       end
     end
+    # rubocop:enable Metrics/MethodLength
   end
 end
