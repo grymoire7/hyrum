@@ -20,6 +20,9 @@ group :development, :test do
   # Rspect testing framework [https://rspec.info/]
   gem "rspec", "~> 3.0", require: false
 
+  # Code coverage analysis [https://github.com/simplecov-ruby/simplecov]
+  gem "simplecov", require: false
+
   # Rake is a Make-like program implemented in Ruby
   gem "rake", "~> 13.0"
 
