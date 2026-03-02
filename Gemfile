@@ -11,8 +11,8 @@ gem "ruby_llm", "~> 1.9"
 gem "zeitwerk", "~> 2.7"
 
 group :development, :test do
-  # Static analysis for code quality [https://rubocop.org/]
-  gem "rubocop", require: false
+  # Static analysis for code quality [https://github.com/testdouble/standard]
+  gem "standard", ">= 1.35.1", require: false
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
