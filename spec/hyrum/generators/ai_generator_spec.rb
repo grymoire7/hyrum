@@ -42,6 +42,46 @@ RSpec.describe Hyrum::Generators::AiGenerator do
       expect(result).to eq(expected_result)
     end
 
+    it "handles JSON string content (e.g. Anthropic, which does not enforce schema)" do
+      ai_generated_content = '{"e418":["Invalid Brewing Method","Teapot not designed for coffee brewing","Please use a suitable brewing device"]}'
+
+      expected_result = {
+        e418: [
+          "Server refuses to brew coffee with a teapot",
+          "Invalid Brewing Method",
+          "Teapot not designed for coffee brewing",
+          "Please use a suitable brewing device"
+        ]
+      }
+
+      mock_ruby_llm_chat(content: ai_generated_content)
+
+      generator = described_class.new(options)
+      result = generator.generate
+
+      expect(result).to eq(expected_result)
+    end
+
+    it "handles markdown-fenced JSON (e.g. Claude wrapping response in ```json ... ```)" do
+      ai_generated_content = "```json\n{\"e418\":[\"Invalid Brewing Method\",\"Teapot not designed for coffee brewing\",\"Please use a suitable brewing device\"]}\n```"
+
+      expected_result = {
+        e418: [
+          "Server refuses to brew coffee with a teapot",
+          "Invalid Brewing Method",
+          "Teapot not designed for coffee brewing",
+          "Please use a suitable brewing device"
+        ]
+      }
+
+      mock_ruby_llm_chat(content: ai_generated_content)
+
+      generator = described_class.new(options)
+      result = generator.generate
+
+      expect(result).to eq(expected_result)
+    end
+
     it "outputs debug info when verbose is true" do
       verbose_options = options.merge(verbose: true)
       expected_content = {"e418" => ["Message 1"]}

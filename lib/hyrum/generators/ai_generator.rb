@@ -29,9 +29,9 @@ module Hyrum
         response = chat.ask(prompt)
         puts "AI response: #{response.inspect}" if options[:verbose]
 
+        result = JsonExtractor.call(response.content)
+
         # Prepend the original message to the generated variations
-        # RubyLLM returns string keys, but our options use symbols
-        result = response.content.dup
         key_str = options[:key].to_s
         if result[key_str].is_a?(Array)
           result[key_str] = [options[:message]] + result[key_str]
@@ -39,6 +39,10 @@ module Hyrum
 
         # Convert string keys to symbols for consistency with the rest of hyrum
         result.transform_keys(&:to_sym)
+      rescue JSON::ParserError
+        puts "Error: AI provider returned a response that could not be parsed as JSON."
+        puts "Try again or use --service fake to test without an AI provider."
+        exit 1
       rescue RubyLLM::ConfigurationError => e
         handle_configuration_error(e)
       rescue RubyLLM::Error => e
@@ -60,6 +64,9 @@ module Hyrum
           "#{options[:message]}"
 
           The messages should be unique and informative.
+
+          Respond with ONLY a JSON object in this exact format, no other text:
+          {"#{options[:key]}": ["message1", "message2", ...]}
         PROMPT
       end
 
