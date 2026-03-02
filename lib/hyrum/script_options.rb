@@ -44,7 +44,19 @@ module Hyrum
       return if options[:ai_model]
 
       service = options[:ai_service]
-      options[:ai_model] = Generators::AI_MODEL_LITERALS[service]
+      strategy = options[:model_strategy]
+
+      if (family = Generators::AI_MODEL_FAMILIES[service])
+        options[:ai_model] = ModelResolver.resolve(
+          provider: service,
+          family: family,
+          strategy: strategy
+        )
+      elsif (literal = Generators::AI_MODEL_LITERALS[service])
+        options[:ai_model] = literal
+      end
+    rescue ModelResolver::ModelNotFoundError => e
+      raise ScriptOptionsError, "Model resolution failed: #{e.message}"
     end
 
     def enforce_mandatory_options

@@ -82,6 +82,48 @@ RSpec.describe Hyrum::ScriptOptions do
       end
     end
 
+    context "with a cloud API provider and no explicit model" do
+      it "resolves the model dynamically via ModelResolver" do
+        allow(Hyrum::ModelResolver).to receive(:resolve)
+          .with(provider: :anthropic, family: "claude-haiku", strategy: :stable)
+          .and_return(:"claude-3-haiku-20240307")
+
+        args = %w[-s anthropic -m hello]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:ai_model]).to eq(:"claude-3-haiku-20240307")
+      end
+
+      it "raises ScriptOptionsError when ModelResolver cannot find a model" do
+        allow(Hyrum::ModelResolver).to receive(:resolve)
+          .and_raise(Hyrum::ModelResolver::ModelNotFoundError, "No models found for anthropic/claude-haiku")
+
+        args = %w[-s anthropic -m hello]
+        expect {
+          Hyrum::ScriptOptions.new(args).parse
+        }.to raise_error(Hyrum::ScriptOptionsError, /Model resolution failed/)
+      end
+    end
+
+    context "with a literal provider (ollama) and no explicit model" do
+      it "uses the literal default without calling ModelResolver" do
+        allow(Hyrum::ModelResolver).to receive(:resolve)
+        args = %w[-s ollama -m hello]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:ai_model]).to eq(:llama3)
+        expect(Hyrum::ModelResolver).not_to have_received(:resolve)
+      end
+    end
+
+    context "when model is explicitly provided" do
+      it "uses the explicit model without calling ModelResolver" do
+        allow(Hyrum::ModelResolver).to receive(:resolve)
+        args = %w[-s anthropic -m hello -d my-custom-model]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:ai_model]).to eq(:"my-custom-model")
+        expect(Hyrum::ModelResolver).not_to have_received(:resolve)
+      end
+    end
+
     context "with --model-strategy flag" do
       it "parses --model-strategy cheapest" do
         args = %w[-s fake --model-strategy cheapest]
