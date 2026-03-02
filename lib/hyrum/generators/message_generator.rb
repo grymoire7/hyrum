@@ -7,13 +7,16 @@ module Hyrum
       perplexity openrouter vertexai bedrock gpustack fake
     ].freeze
 
-    AI_MODEL_DEFAULTS = {
-      openai: :"gpt-4o-mini",
-      anthropic: :"claude-haiku-20250514",
-      gemini: :"gemini-2.0-flash-exp",
+    AI_MODEL_FAMILIES = {
+      openai: "gpt-mini",
+      anthropic: "claude-haiku",
+      gemini: "gemini-flash",
+      mistral: "mistral-small",
+      deepseek: "deepseek"
+    }.freeze
+
+    AI_MODEL_LITERALS = {
       ollama: :llama3,
-      mistral: :"mistral-small-latest",
-      deepseek: :"deepseek-chat",
       perplexity: :"llama-3.1-sonar-small-128k-online",
       openrouter: :"openai/gpt-4o-mini",
       vertexai: :"gemini-2.0-flash-exp",

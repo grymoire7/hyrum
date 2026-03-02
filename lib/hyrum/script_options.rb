@@ -40,8 +40,10 @@ module Hyrum
     private
 
     def set_dynamic_defaults
-      default_model = Generators::AI_MODEL_DEFAULTS[options[:ai_service]]
-      options[:ai_model] ||= default_model
+      return if options[:ai_model]
+
+      service = options[:ai_service]
+      options[:ai_model] = Generators::AI_MODEL_LITERALS[service]
     end
 
     def enforce_mandatory_options

@@ -45,12 +45,21 @@ RSpec.describe Hyrum::Generators::MessageGenerator do
     end
   end
 
-  describe "AI_MODEL_DEFAULTS constant" do
-    it "has defaults for all providers" do
-      expect(Hyrum::Generators::AI_MODEL_DEFAULTS).to include(
-        openai: :"gpt-4o-mini",
-        anthropic: :"claude-haiku-20250514",
-        gemini: :"gemini-2.0-flash-exp",
+  describe "AI_MODEL_FAMILIES constant" do
+    it "maps cloud API providers to family strings" do
+      expect(Hyrum::Generators::AI_MODEL_FAMILIES).to include(
+        openai: "gpt-mini",
+        anthropic: "claude-haiku",
+        gemini: "gemini-flash",
+        mistral: "mistral-small",
+        deepseek: "deepseek"
+      )
+    end
+  end
+
+  describe "AI_MODEL_LITERALS constant" do
+    it "maps local/managed providers to literal model name symbols" do
+      expect(Hyrum::Generators::AI_MODEL_LITERALS).to include(
         ollama: :llama3,
         fake: :fake
       )
