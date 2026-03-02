@@ -56,3 +56,14 @@ RSpec.describe Hyrum::ModelResolver do
     end
   end
 end
+
+RSpec.describe "AI_MODEL_FAMILIES smoke test (real registry, no network)" do
+  Hyrum::Generators::AI_MODEL_FAMILIES.each do |provider, family|
+    it "resolves at least one model for #{provider}/#{family}" do
+      models = RubyLLM.models.by_provider(provider).by_family(family)
+      expect(models).to be_any,
+        "Expected RubyLLM registry to contain models for provider=#{provider} family=#{family}. " \
+        "Run `bundle update ruby_llm` or check the family name."
+    end
+  end
+end
