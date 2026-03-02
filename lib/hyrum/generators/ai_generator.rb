@@ -63,7 +63,6 @@ module Hyrum
         PROMPT
       end
 
-      # rubocop:disable Metrics/MethodLength
       def response_schema
         {
           type: "object",
@@ -79,7 +78,6 @@ module Hyrum
           additionalProperties: false
         }
       end
-      # rubocop:enable Metrics/MethodLength
 
       def handle_configuration_error(error)
         puts "Configuration Error: #{error.message}"

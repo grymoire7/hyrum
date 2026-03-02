@@ -21,7 +21,6 @@ module Hyrum
       @args = args
     end
 
-    # rubocop:disable Metrics/MethodLength
     def parse
       OptionParser.new do |parser|
         define_options(parser)
@@ -37,7 +36,6 @@ module Hyrum
     rescue OptionParser::InvalidArgument => e
       raise ScriptOptionsError, "Invalid argument for option: #{e.message}"
     end
-    # rubocop:enable Metrics/MethodLength
 
     private
 
@@ -125,7 +123,6 @@ module Hyrum
       end
     end
 
-    # rubocop:disable Metrics/MethodLength
     def validation_options(parser)
       parser.on("--validate", "Enable quality validation (default: off)") do
         options[:validate] = true
@@ -143,6 +140,5 @@ module Hyrum
         options[:show_scores] = true
       end
     end
-    # rubocop:enable Metrics/MethodLength
   end
 end
