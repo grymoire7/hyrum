@@ -17,7 +17,7 @@ module Hyrum
         min_quality: 70,
         strict: false,
         show_scores: false,
-        model_strategy: :cheapest
+        model_strategy: :stable
       }
       @args = args
     end

@@ -101,10 +101,10 @@ RSpec.describe Hyrum::ScriptOptions do
         expect(options[:model_strategy]).to eq(:stable)
       end
 
-      it "defaults model_strategy to :cheapest" do
+      it "defaults model_strategy to :stable" do
         args = %w[-s fake]
         options = Hyrum::ScriptOptions.new(args).parse
-        expect(options[:model_strategy]).to eq(:cheapest)
+        expect(options[:model_strategy]).to eq(:stable)
       end
 
       it "rejects invalid strategy" do

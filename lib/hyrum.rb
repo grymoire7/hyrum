@@ -36,7 +36,7 @@ class CLIOptions < Dry::Struct
   attribute :number, Types::Integer.default(5)
   attribute :format, Types::Coercible::Symbol.default(:text)
   attribute :verbose, Types::Bool.default(false)
-  attribute :model_strategy, Types::Coercible::Symbol.default(:cheapest)
+  attribute :model_strategy, Types::Coercible::Symbol.default(:stable)
   attribute :validate, Types::Bool.default(false)
   attribute :min_quality, Types::Integer.default(70)
   attribute :strict, Types::Bool.default(false)
