@@ -6,7 +6,7 @@ module Hyrum
 
     def self.resolve(provider:, family:, strategy: :cheapest)
       models = RubyLLM.models.by_provider(provider).by_family(family)
-      raise ModelNotFoundError, "No models found for #{provider}/#{family}" if models.empty?
+      raise ModelNotFoundError, "No models found for #{provider}/#{family}" if models.none?
 
       selected = case strategy
       when :cheapest then models.min_by(&:input_price_per_million)
