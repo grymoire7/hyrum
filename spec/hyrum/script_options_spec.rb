@@ -82,6 +82,39 @@ RSpec.describe Hyrum::ScriptOptions do
       end
     end
 
+    context "with --model-strategy flag" do
+      it "parses --model-strategy cheapest" do
+        args = %w[-s fake --model-strategy cheapest]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:model_strategy]).to eq(:cheapest)
+      end
+
+      it "parses --model-strategy newest" do
+        args = %w[-s fake --model-strategy newest]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:model_strategy]).to eq(:newest)
+      end
+
+      it "parses --model-strategy stable" do
+        args = %w[-s fake --model-strategy stable]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:model_strategy]).to eq(:stable)
+      end
+
+      it "defaults model_strategy to :cheapest" do
+        args = %w[-s fake]
+        options = Hyrum::ScriptOptions.new(args).parse
+        expect(options[:model_strategy]).to eq(:cheapest)
+      end
+
+      it "rejects invalid strategy" do
+        args = %w[-s fake --model-strategy bogus]
+        expect {
+          Hyrum::ScriptOptions.new(args).parse
+        }.to raise_error(Hyrum::ScriptOptionsError, /Invalid argument/)
+      end
+    end
+
     context "with validation options" do
       it "parses --validate flag" do
         args = %w[--validate -s fake -m test]

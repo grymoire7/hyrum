@@ -16,7 +16,8 @@ module Hyrum
         validate: false,
         min_quality: 70,
         strict: false,
-        show_scores: false
+        show_scores: false,
+        model_strategy: :cheapest
       }
       @args = args
     end
@@ -89,6 +90,12 @@ module Hyrum
       description = "AI model: must be a valid model for the selected service"
       parser.on("-d MODEL", "--model MODEL", description) do |model|
         options[:ai_model] = model.to_sym
+      end
+
+      strategies = %w[cheapest newest stable]
+      description = "Model selection strategy: #{strategies.join(", ")} (default: cheapest)"
+      parser.on("--model-strategy STRATEGY", strategies, description) do |strategy|
+        options[:model_strategy] = strategy.to_sym
       end
     end
 
