@@ -2,6 +2,8 @@
 
 source "https://rubygems.org"
 
+gemspec
+
 # Generative AI toolset for Ruby
 # gem "gen-ai" # , "~> 0.4.3"
 gem "dry-struct", "~> 1.8"
@@ -28,4 +30,6 @@ group :development, :test do
 
   # Pry is a powerful alternative to the standard IRB shell for Ruby
   gem "pry"
+
+  gem "irb"
 end

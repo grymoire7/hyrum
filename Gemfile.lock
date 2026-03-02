@@ -1,3 +1,10 @@
+PATH
+  remote: .
+  specs:
+    hyrum (0.2.0)
+      ruby_llm (~> 1.9)
+      zeitwerk (~> 2.7)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -8,6 +15,7 @@ GEM
       racc
     coderay (1.1.3)
     concurrent-ruby (1.3.6)
+    date (3.5.1)
     diff-lcs (1.6.2)
     docile (1.4.1)
     dry-configurable (1.3.0)
@@ -50,6 +58,7 @@ GEM
       dry-initializer (~> 3.2)
       dry-schema (~> 1.14)
       zeitwerk (~> 2.6)
+    erb (6.0.2)
     event_stream_parser (1.0.0)
     faraday (2.14.1)
       faraday-net_http (>= 2.0, < 3.5)
@@ -63,6 +72,11 @@ GEM
       faraday (~> 2.0)
     ice_nine (0.11.2)
     io-console (0.8.2)
+    irb (1.17.0)
+      pp (>= 0.6.0)
+      prism (>= 1.3.0)
+      rdoc (>= 4.0.0)
+      reline (>= 0.4.2)
     json (2.18.1)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
@@ -77,14 +91,24 @@ GEM
     parser (3.3.10.2)
       ast (~> 2.4.1)
       racc
+    pp (0.6.3)
+      prettyprint
+    prettyprint (0.2.0)
     prism (1.9.0)
     pry (0.16.0)
       coderay (~> 1.1)
       method_source (~> 1.0)
       reline (>= 0.6.0)
+    psych (5.3.1)
+      date
+      stringio
     racc (1.8.1)
     rainbow (3.1.1)
     rake (13.3.1)
+    rdoc (7.2.0)
+      erb
+      psych (>= 4.0.0)
+      tsort
     regexp_parser (2.11.3)
     reline (0.6.3)
       io-console (~> 0.5)
@@ -149,6 +173,8 @@ GEM
     standard-performance (1.9.0)
       lint_roller (~> 1.1)
       rubocop-performance (~> 1.26.0)
+    stringio (3.2.0)
+    tsort (0.2.0)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.2.0)
@@ -163,6 +189,8 @@ DEPENDENCIES
   brakeman
   dry-struct (~> 1.8)
   dry-validation (~> 1.11)
+  hyrum!
+  irb
   matrix (~> 0.4)
   pry
   rake (~> 13.0)
